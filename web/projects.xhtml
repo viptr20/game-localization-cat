@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        locale="#{localeBean.currentLocale}">
+
+    <html lang="#{localeBean.currentLocale.language}"
+          dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
+
+    <h:head>
+        <title>#{msg['projects.title']}</title>
+        <h:outputStylesheet library="css" name="layout.css" />
+    </h:head>
+
+    <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
+        <h:form id="projectsForm">
+            <p:panel header="#{msg['projects.header']}" style="margin:1rem;">
+
+                <p:toolbar style="margin-bottom:1rem;">
+                    <p:toolbarGroup align="right">
+                        <p:selectOneMenu id="localeMenu"
+                                         value="#{localeBean.language}"
+                                         style="min-width:170px;">
+                            <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
+                            <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
+                            <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
+                            <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
+                            <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
+                            <p:ajax listener="#{localeBean.changeLanguage}" update="@all" />
+                        </p:selectOneMenu>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:dataTable value="#{projectsBean.projects}"
+                             var="prj"
+                             paginator="true"
+                             rows="10"
+                             style="width:100%;">
+
+                    <p:column headerText="#{msg['column.id']}">
+                        <h:outputText value="#{prj.id}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg['column.name']}">
+                        <h:outputText value="#{prj.name}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg['column.source']}">
+                        <h:outputText value="#{prj.sourceLang}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg['column.targets']}">
+                        <h:outputText value="#{prj.targetLangs}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg['column.status']}">
+                        <h:outputText value="#{prj.status}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg['column.actions']}">
+                        <p:commandButton value="#{msg['button.details']}"
+                                         action="details"
+                                         process="@this"
+                                         ajax="false"
+                                         icon="ui-icon-search">
+                            <f:param name="projectId" value="#{prj.id}" />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+
+                <br/>
+
+                <p:commandButton value="#{msg['button.backToDashboard']}"
+                                 action="back"
+                                 process="@this"
+                                 ajax="false"
+                                 icon="ui-icon-arrowreturnthick-1-w" />
+
+            </p:panel>
+        </h:form>
+    </h:body>
+    </html>
+</f:view>

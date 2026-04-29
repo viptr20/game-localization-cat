@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        locale="#{localeBean.currentLocale}">
+
+    <f:metadata>
+        <f:viewParam name="projectId" value="#{projectEditorBean.projectId}" />
+        <f:event type="preRenderView" listener="#{projectEditorBean.init}" />
+    </f:metadata>
+
+    <html lang="#{localeBean.currentLocale.language}"
+          dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
+
+    <h:head>
+        <title>#{msg['projectEditor.title']}</title>
+        <h:outputStylesheet library="css" name="layout.css" />
+    </h:head>
+
+    <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
+        <h:form id="editorForm">
+            <p:panel header="#{msg['projectEditor.header']}" style="margin:1rem;">
+
+                <p:toolbar style="margin-bottom:1rem;">
+                    <p:toolbarGroup align="right">
+                        <p:selectOneMenu id="localeMenu"
+                                         value="#{localeBean.language}"
+                                         style="min-width:170px;">
+                            <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
+                            <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
+                            <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
+                            <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
+                            <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
+                            <p:ajax listener="#{localeBean.changeLanguage}" update="@all" />
+                        </p:selectOneMenu>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <p:messages id="messages" showDetail="true" closable="true" />
+
+                <h:outputText value="#{msg['projectEditor.projectId']} #{projectEditorBean.projectId}" />
+                <br/><br/>
+
+                <p:dataTable value="#{projectEditorBean.segments}"
+                             var="seg"
+                             style="width:100%;">
+
+                    <p:column headerText="#{msg['column.id']}">
+                        <h:outputText value="#{seg.id}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg['column.source']}">
+                        <h:outputText value="#{seg.sourceText}" />
+                    </p:column>
+
+                    <p:column headerText="#{msg['column.target']}">
+                        <p:inputTextarea value="#{seg.targetText}"
+                                         autoResize="true"
+                                         rows="3"
+                                         style="width:100%;" />
+                    </p:column>
+
+                    <p:column headerText="#{msg['column.status']}">
+                        <p:selectOneMenu value="#{seg.status}" style="width:100%;">
+                            <f:selectItem itemLabel="#{msg['status.new']}" itemValue="NEW" />
+                            <f:selectItem itemLabel="#{msg['status.inProgress']}" itemValue="IN_PROGRESS" />
+                            <f:selectItem itemLabel="#{msg['status.done']}" itemValue="DONE" />
+                        </p:selectOneMenu>
+                    </p:column>
+
+                </p:dataTable>
+
+                <br/>
+
+                <p:commandButton value="#{msg['button.save']}"
+                                 action="#{projectEditorBean.save}"
+                                 process="@form"
+                                 update="@form"
+                                 icon="ui-icon-disk" />
+
+                <p:spacer width="10"/>
+
+                <p:commandButton value="#{msg['button.back']}"
+                                 action="back"
+                                 process="@this"
+                                 ajax="false"
+                                 styleClass="ui-button-secondary"
+                                 icon="ui-icon-arrowreturnthick-1-w">
+                    <f:param name="projectId" value="#{projectEditorBean.projectId}" />
+                </p:commandButton>
+
+            </p:panel>
+        </h:form>
+    </h:body>
+    </html>
+</f:view>

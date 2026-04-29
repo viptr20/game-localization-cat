@@ -1,0 +1,68 @@
+package cat.dao;
+
+import cat.db.DBUtil;
+import cat.model.User;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
+public class UserDAO {
+
+    // Ще вземем и password, за да сме 1:1 със схемата
+    private static final String LOGIN_SQL =
+            "SELECT id, username, password, full_name, role " +
+            "FROM users WHERE username = ? AND password = ?";
+
+    public User validate(String username, String password) {
+        User user = null;
+
+        try {
+            DataSource ds = DBUtil.getDataSource();
+
+            try (Connection con = ds.getConnection()) {
+
+                // --- DEBUG: какво реално стига до DAO и към коя база сме вързани
+                System.out.println("DEBUG username = [" + username + "]");
+                System.out.println("DEBUG password = [" + password + "]");
+                System.out.println("DEBUG catalog = " + con.getCatalog());
+
+                // Колко реда виждаме в users от Java
+                try (Statement st = con.createStatement();
+                     ResultSet dbg = st.executeQuery("SELECT COUNT(*) FROM users")) {
+                    if (dbg.next()) {
+                        System.out.println("DEBUG users count (from Java) = " + dbg.getInt(1));
+                    }
+                }
+
+                // --- Реалният login query
+                try (PreparedStatement ps = con.prepareStatement(LOGIN_SQL)) {
+                    ps.setString(1, username);
+                    ps.setString(2, password);
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            user = new User(
+                                    rs.getInt("id"),
+                                    rs.getString("username"),
+                                    rs.getString("full_name"),
+                                    rs.getString("role")
+                            );
+                            System.out.println("DEBUG FOUND USER = " + user.getUsername()
+                                    + ", role=" + user.getRole());
+                        } else {
+                            System.out.println("DEBUG NO USER FOUND");
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+}

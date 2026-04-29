@@ -1,0 +1,37 @@
+/* layout.css – RTL/LTR helper classes shared by all pages */
+
+.rtl-layout {
+    direction: rtl;
+    text-align: right;
+}
+
+.rtl-layout .ui-panel-title,
+.rtl-layout .ui-toolbar,
+.rtl-layout .ui-datatable,
+.rtl-layout .ui-tabs-nav,
+.rtl-layout .ui-selectonemenu,
+.rtl-layout .ui-button-text,
+.rtl-layout .ui-outputlabel,
+.rtl-layout .ui-messages,
+.rtl-layout .ui-widget {
+    direction: rtl;
+    text-align: right;
+}
+
+.rtl-layout .ui-toolbar-group-right {
+    float: left !important;
+}
+
+.rtl-layout .ui-toolbar-group-left {
+    float: right !important;
+}
+
+.rtl-layout .ui-datatable table th,
+.rtl-layout .ui-datatable table td {
+    text-align: right;
+}
+
+.rtl-layout .ui-panelgrid td,
+.rtl-layout .ui-panelgrid tr {
+    text-align: right;
+}

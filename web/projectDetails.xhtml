@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui"
+        locale="#{localeBean.currentLocale}">
+
+    <f:metadata>
+        <f:viewParam name="projectId" value="#{projectDetailsBean.projectId}" />
+        <f:event type="preRenderView" listener="#{projectDetailsBean.init}" />
+    </f:metadata>
+
+    <html lang="#{localeBean.currentLocale.language}"
+          dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
+
+    <h:head>
+        <title>#{msg['projectDetails.title']}</title>
+        <h:outputStylesheet library="css" name="layout.css" />
+    </h:head>
+
+    <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
+        <h:form id="detailsForm">
+            <p:panel header="#{msg['projectDetails.header']}" style="max-width:800px;margin:2rem auto;">
+
+                <p:toolbar style="margin-bottom:1rem;">
+                    <p:toolbarGroup align="right">
+                        <p:selectOneMenu id="localeMenu"
+                                         value="#{localeBean.language}"
+                                         style="min-width:170px;">
+                            <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
+                            <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
+                            <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
+                            <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
+                            <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
+                            <p:ajax listener="#{localeBean.changeLanguage}" update="@all" />
+                        </p:selectOneMenu>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+                <h:panelGrid columns="2" columnClasses="label,value" styleClass="ui-fluid">
+                    <h:outputText value="#{msg['projectDetails.name']}" />
+                    <h:outputText value="#{projectDetailsBean.project.name}" />
+
+                    <h:outputText value="#{msg['projectDetails.sourceLanguage']}" />
+                    <h:outputText value="#{projectDetailsBean.project.sourceLang}" />
+
+                    <h:outputText value="#{msg['projectDetails.targetLanguages']}" />
+                    <h:outputText value="#{projectDetailsBean.project.targetLangs}" />
+
+                    <h:outputText value="#{msg['projectDetails.status']}" />
+                    <h:outputText value="#{projectDetailsBean.project.status}" />
+
+                    <h:outputText value="#{msg['projectDetails.description']}" />
+                    <h:outputText value="#{projectDetailsBean.project.description}" />
+                </h:panelGrid>
+
+                <br/>
+
+                <p:commandButton value="#{msg['button.edit']}"
+                                 action="edit"
+                                 process="@this"
+                                 ajax="false"
+                                 icon="ui-icon-pencil">
+                    <f:param name="projectId" value="#{projectDetailsBean.projectId}" />
+                </p:commandButton>
+
+                <p:spacer width="10"/>
+
+                <p:commandButton value="#{msg['button.review']}"
+                                 action="review"
+                                 process="@this"
+                                 ajax="false"
+                                 icon="ui-icon-check">
+                    <f:param name="projectId" value="#{projectDetailsBean.projectId}" />
+                </p:commandButton>
+
+                <p:spacer width="10"/>
+
+                <p:commandButton value="#{msg['button.back']}"
+                                 action="back"
+                                 process="@this"
+                                 ajax="false"
+                                 styleClass="ui-button-secondary"
+                                 icon="ui-icon-arrowreturnthick-1-w" />
+            </p:panel>
+        </h:form>
+    </h:body>
+    </html>
+</f:view>

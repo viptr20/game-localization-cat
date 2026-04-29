@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/dashboard.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/WEB-INF/faces-config.xml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/index.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/help.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/forgotPassword.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/login.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/loginError.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/projects.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/projectDetails.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/projectEditor.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/review.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/userProfile.xhtml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/LoginBean.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/ProjectsBean.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/ProjectDetailsBean.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/ProjectEditorBean.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/ReviewBean.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/UserProfileBean.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/DashboardBean.java</file>
+        </group>
+    </open-files>
+</project-private>
