@@ -1,5 +1,3 @@
-Решение на lab 13a
-
 **GlassFish 5**
 **Apache NetBeans IDE 29**
 **JDK 8**
