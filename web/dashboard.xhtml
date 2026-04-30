@@ -22,6 +22,8 @@
             <p:panel header="#{msg['app.title']}" style="margin:1rem;">
 
                 <p:toolbar style="margin-bottom:1rem;">
+
+                    <!-- Project selector -->
                     <p:toolbarGroup>
                         <h:outputText value="#{msg['label.project']}: " style="margin-right:8px;" />
 
@@ -38,25 +40,28 @@
                         </p:selectOneMenu>
                     </p:toolbarGroup>
 
+                    <!-- Language + nav -->
                     <p:toolbarGroup align="right">
+
                         <p:selectOneMenu id="localeMenu"
-                                        value="#{localeBean.language}"
-                                        style="min-width:170px;">
-                           <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
-                           <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
-                           <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
-                           <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
-                           <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
-                       </p:selectOneMenu>
+                                         value="#{localeBean.language}"
+                                         style="min-width:170px;">
+                            <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
+                            <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
+                            <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
+                            <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
+                            <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
+                        </p:selectOneMenu>
 
-                       <p:spacer width="10" />
+                        <p:spacer width="10" />
 
-                       <p:commandButton value="#{msg['button.applyLanguage']}"
-                                        actionListener="#{localeBean.changeLanguage}"
-                                        process="@form"
-                                        ajax="false"
-                                        icon="ui-icon-refresh"
-                                        styleClass="ui-button-secondary" />
+                        <!-- сменя езика и прави redirect към dashboard -->
+                        <p:commandButton value="#{msg['button.applyLanguage']}"
+                                         action="#{localeBean.changeLanguage}"
+                                         process="@form"
+                                         ajax="false"
+                                         icon="ui-icon-refresh"
+                                         styleClass="ui-button-secondary" />
 
                         <p:spacer width="10" />
 
@@ -65,7 +70,9 @@
                                          process="@this"
                                          ajax="false"
                                          icon="ui-icon-person" />
+
                         <p:spacer width="10" />
+
                         <p:commandButton value="#{msg['button.projects']}"
                                          action="projects"
                                          process="@this"
