@@ -1,27 +1,19 @@
 package cat.dao;
 
+import cat.db.DBUtil;
 import cat.model.DashboardStats;
 
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
 public class DashboardDAO {
 
-    private final DataSource dataSource;
-
     public DashboardDAO() {
-        try {
-            InitialContext ctx = new InitialContext();
-            dataSource = (DataSource) ctx.lookup("jdbc/CATDB");
-        } catch (Exception e) {
-            throw new RuntimeException("Cannot lookup DataSource jdbc/CATDB", e);
-        }
+        // без JNDI тук – DBUtil решава дали да ползва JNDI или директен JDBC
     }
 
     private Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+        return DBUtil.getConnection();
     }
 
     /* ===================== Проекти ===================== */
@@ -128,7 +120,6 @@ public class DashboardDAO {
 
     /* ===================== Данни за графики ===================== */
 
-    // Bar chart: Segment Status
     public Map<String, Integer> loadStatusCounts(Integer projectId) {
         String sql =
             "SELECT status, COUNT(*) AS cnt " +
@@ -160,7 +151,6 @@ public class DashboardDAO {
         return result;
     }
 
-    // Pie chart: Language Split
     public Map<String, Integer> loadLanguageSplit(Integer projectId) {
         String sql =
             "SELECT COALESCE(language_pair, 'Unknown') AS lang, COUNT(*) AS cnt " +
@@ -193,7 +183,6 @@ public class DashboardDAO {
         return result;
     }
 
-    // Radar chart: Project Profile (0-100)
     public Map<String, Integer> loadRadarProfile(Integer projectId) {
         String sql =
             "SELECT COUNT(*) AS total_segments, " +
@@ -241,8 +230,6 @@ public class DashboardDAO {
         }
         return result;
     }
-
-    /* ===================== DTO за таблицата ===================== */
 
     public static class ProjectRowDTO {
         private int id;

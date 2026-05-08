@@ -1,19 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cat.dao;
-
-/**
- *
- * @author vanyaramirez
- */
 
 import cat.db.DBUtil;
 import cat.model.Project;
 
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,15 +20,12 @@ public class ProjectDAO {
 
     public List<Project> findAll() {
         List<Project> list = new ArrayList<>();
-        try {
-            DataSource ds = DBUtil.getDataSource();
-            try (Connection con = ds.getConnection();
-                 PreparedStatement ps = con.prepareStatement(FIND_ALL_SQL);
-                 ResultSet rs = ps.executeQuery()) {
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(FIND_ALL_SQL);
+             ResultSet rs = ps.executeQuery()) {
 
-                while (rs.next()) {
-                    list.add(mapRow(rs));
-                }
+            while (rs.next()) {
+                list.add(mapRow(rs));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,16 +34,13 @@ public class ProjectDAO {
     }
 
     public Project findById(int id) {
-        try {
-            DataSource ds = DBUtil.getDataSource();
-            try (Connection con = ds.getConnection();
-                 PreparedStatement ps = con.prepareStatement(FIND_BY_ID_SQL)) {
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(FIND_BY_ID_SQL)) {
 
-                ps.setInt(1, id);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        return mapRow(rs);
-                    }
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
                 }
             }
         } catch (Exception e) {

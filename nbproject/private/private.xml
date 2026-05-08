@@ -22,6 +22,11 @@
             <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/ReviewBean.java</file>
             <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/UserProfileBean.java</file>
             <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/DashboardBean.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/DashboardDAO.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/db/DBUtil.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/ProjectDAO.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/SegmentDAO.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/UserDAO.java</file>
         </group>
     </open-files>
 </project-private>
