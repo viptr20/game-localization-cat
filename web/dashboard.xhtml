@@ -1,173 +1,168 @@
 <!DOCTYPE html>
-<f:view xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        xmlns:p="http://primefaces.org/ui"
-        locale="#{localeBean.currentLocale}">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      lang="#{localeBean.currentLocale.language}"
+      dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
 
-    <html lang="#{localeBean.currentLocale.language}"
-          dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
+<h:head>
+    <title>#{msg['app.title']}</title>
+    <h:outputStylesheet library="css" name="layout.css"/>
+</h:head>
 
-    <h:head>
-        <title>#{msg['app.title']}</title>
-        <h:outputStylesheet library="css" name="layout.css"/>
-    </h:head>
+<h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
 
-    <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
+    <h:form id="dashboardForm">
 
-        <h:form id="dashboardForm">
+        <p:growl id="msgs" showDetail="true" life="3000" />
 
-            <p:growl id="msgs" showDetail="true" life="3000" />
+        <p:panel header="#{msg['app.title']}" style="margin:1rem;">
 
-            <p:panel header="#{msg['app.title']}" style="margin:1rem;">
+            <p:toolbar style="margin-bottom:1rem;">
 
-                <p:toolbar style="margin-bottom:1rem;">
+                <p:toolbarGroup>
+                    <h:outputText value="#{msg['label.project']}: " style="margin-right:8px;" />
 
-                    <!-- Project selector -->
-                    <p:toolbarGroup>
-                        <h:outputText value="#{msg['label.project']}: " style="margin-right:8px;" />
+                    <p:selectOneMenu id="projectMenu"
+                                     value="#{dashboardBean.selectedProjectId}"
+                                     style="min-width:220px;">
+                        <f:selectItem itemLabel="#{msg['label.allProjects']}" itemValue="#{null}" />
+                        <f:selectItems value="#{dashboardBean.projects}"
+                                       var="proj"
+                                       itemValue="#{proj.id}"
+                                       itemLabel="#{proj.name}" />
+                        <p:ajax listener="#{dashboardBean.onProjectChange}"
+                                update="dashboardForm" />
+                    </p:selectOneMenu>
+                </p:toolbarGroup>
 
-                        <p:selectOneMenu id="projectMenu"
-                                         value="#{dashboardBean.selectedProjectId}"
-                                         style="min-width:220px;">
-                            <f:selectItem itemLabel="#{msg['label.allProjects']}" itemValue="#{null}" />
-                            <f:selectItems value="#{dashboardBean.projects}"
-                                           var="proj"
-                                           itemValue="#{proj.id}"
-                                           itemLabel="#{proj.name}" />
-                            <p:ajax listener="#{dashboardBean.onProjectChange}"
-                                    update="dashboardForm" />
-                        </p:selectOneMenu>
-                    </p:toolbarGroup>
+                <p:toolbarGroup align="right">
 
-                    <!-- Language + nav -->
-                    <p:toolbarGroup align="right">
+                    <p:selectOneMenu id="localeMenu"
+                                     value="#{localeBean.language}"
+                                     style="min-width:170px;">
+                        <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
+                        <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
+                        <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
+                        <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
+                        <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
+                        <f:selectItem itemValue="he" itemLabel="#{msg['lang.he']}" />
+                    </p:selectOneMenu>
 
-                        <p:selectOneMenu id="localeMenu"
-                                         value="#{localeBean.language}"
-                                         style="min-width:170px;">
-                            <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
-                            <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
-                            <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
-                            <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
-                            <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
-                        </p:selectOneMenu>
+                    <p:spacer width="10" />
 
-                        <p:spacer width="10" />
+                    <p:commandButton value="#{msg['button.applyLanguage']}"
+                                     action="#{localeBean.applyLanguage}"
+                                     process="@form"
+                                     ajax="false"
+                                     icon="pi pi-refresh"
+                                     styleClass="ui-button-secondary" />
 
-                        <!-- сменя езика и прави redirect към dashboard -->
-                        <p:commandButton value="#{msg['button.applyLanguage']}"
-                                         action="#{localeBean.changeLanguage}"
-                                         process="@form"
-                                         ajax="false"
-                                         icon="ui-icon-refresh"
-                                         styleClass="ui-button-secondary" />
+                    <p:spacer width="10" />
 
-                        <p:spacer width="10" />
+                    <p:commandButton value="#{msg['button.profile']}"
+                                     action="profile"
+                                     process="@this"
+                                     ajax="false"
+                                     icon="pi pi-user" />
 
-                        <p:commandButton value="#{msg['button.profile']}"
-                                         action="profile"
-                                         process="@this"
-                                         ajax="false"
-                                         icon="ui-icon-person" />
+                    <p:spacer width="10" />
 
-                        <p:spacer width="10" />
+                    <p:commandButton value="#{msg['button.projects']}"
+                                     action="projects"
+                                     process="@this"
+                                     ajax="false"
+                                     icon="pi pi-folder-open" />
+                </p:toolbarGroup>
+            </p:toolbar>
 
-                        <p:commandButton value="#{msg['button.projects']}"
-                                         action="projects"
-                                         process="@this"
-                                         ajax="false"
-                                         icon="ui-icon-folder-open" />
-                    </p:toolbarGroup>
-                </p:toolbar>
+            <p:tabView>
 
-                <p:tabView>
+                <p:tab title="#{msg['tab.overview']}">
+                    <div class="ui-g">
 
-                    <p:tab title="#{msg['tab.overview']}">
-                        <div class="ui-g">
-
-                            <div class="ui-g-12 ui-md-6">
-                                <p:radarChart model="#{dashboardBean.radarModel}"
-                                              style="width:100%;height:260px;" />
-                            </div>
-
-                            <div class="ui-g-12 ui-md-6">
-                                <p:chart type="bar"
-                                         model="#{dashboardBean.statusBarModel}"
-                                         style="width:100%;height:260px;" />
-                            </div>
-
-                            <div class="ui-g-12 ui-md-6">
-                                <p:chart type="pie"
-                                         model="#{dashboardBean.languagePieModel}"
-                                         style="width:100%;height:260px;" />
-                            </div>
-
-                            <div class="ui-g-12 ui-md-6">
-                                <p:panel header="#{msg['panel.quickStats']}" style="height:260px;">
-                                    <h:panelGrid columns="2" cellpadding="6" style="width:100%;">
-                                        <h:outputText value="#{msg['stats.totalProjects']}" />
-                                        <h:outputText value="#{dashboardBean.stats.totalProjects}" />
-
-                                        <h:outputText value="#{msg['stats.totalSegments']}" />
-                                        <h:outputText value="#{dashboardBean.stats.totalSegments}" />
-
-                                        <h:outputText value="#{msg['stats.newSegments']}" />
-                                        <h:outputText value="#{dashboardBean.stats.newSegments}" />
-
-                                        <h:outputText value="#{msg['stats.inProgress']}" />
-                                        <h:outputText value="#{dashboardBean.stats.inProgressSegments}" />
-
-                                        <h:outputText value="#{msg['stats.doneSegments']}" />
-                                        <h:outputText value="#{dashboardBean.stats.doneSegments}" />
-
-                                        <h:outputText value="#{msg['stats.completedPercent']}" />
-                                        <h:outputText value="#{dashboardBean.completedPercent}" />
-                                    </h:panelGrid>
-                                </p:panel>
-                            </div>
+                        <div class="ui-g-12 ui-md-6">
+                            <p:radarChart model="#{dashboardBean.radarModel}"
+                                          style="width:100%;height:260px;" />
                         </div>
-                    </p:tab>
 
-                    <p:tab title="#{msg['tab.details']}">
-                        <p:dataTable value="#{dashboardBean.tableData}"
-                                     var="p"
-                                     paginator="true"
-                                     rows="10"
-                                     style="width:100%;">
+                        <div class="ui-g-12 ui-md-6">
+                            <p:chart type="bar"
+                                     model="#{dashboardBean.statusBarModel}"
+                                     style="width:100%;height:260px;" />
+                        </div>
 
-                            <p:column headerText="#{msg['column.project']}">
-                                <h:outputText value="#{p.name}" />
-                            </p:column>
+                        <div class="ui-g-12 ui-md-6">
+                            <p:chart type="pie"
+                                     model="#{dashboardBean.languagePieModel}"
+                                     style="width:100%;height:260px;" />
+                        </div>
 
-                            <p:column headerText="#{msg['column.languages']}">
-                                <h:outputText value="#{p.languages}" />
-                            </p:column>
+                        <div class="ui-g-12 ui-md-6">
+                            <p:panel header="#{msg['panel.quickStats']}" style="height:260px;">
+                                <h:panelGrid columns="2" cellpadding="6" style="width:100%;">
+                                    <h:outputText value="#{msg['stats.totalProjects']}" />
+                                    <h:outputText value="#{dashboardBean.stats.totalProjects}" />
 
-                            <p:column headerText="#{msg['column.segments']}">
-                                <h:outputText value="#{p.segments}" />
-                            </p:column>
+                                    <h:outputText value="#{msg['stats.totalSegments']}" />
+                                    <h:outputText value="#{dashboardBean.stats.totalSegments}" />
 
-                            <p:column headerText="#{msg['column.progress']}">
-                                <h:outputText value="#{p.progressPercent}" />
-                            </p:column>
+                                    <h:outputText value="#{msg['stats.newSegments']}" />
+                                    <h:outputText value="#{dashboardBean.stats.newSegments}" />
 
-                            <p:column headerText="#{msg['column.createdAt']}">
-                                <h:outputText value="#{p.createdAt}" />
-                            </p:column>
+                                    <h:outputText value="#{msg['stats.inProgress']}" />
+                                    <h:outputText value="#{dashboardBean.stats.inProgressSegments}" />
 
-                            <p:column headerText="#{msg['column.completedAt']}">
-                                <h:outputText value="#{p.completedAt}" />
-                            </p:column>
+                                    <h:outputText value="#{msg['stats.doneSegments']}" />
+                                    <h:outputText value="#{dashboardBean.stats.doneSegments}" />
 
-                        </p:dataTable>
-                    </p:tab>
+                                    <h:outputText value="#{msg['stats.completedPercent']}" />
+                                    <h:outputText value="#{dashboardBean.completedPercent}" />
+                                </h:panelGrid>
+                            </p:panel>
+                        </div>
+                    </div>
+                </p:tab>
 
-                </p:tabView>
+                <p:tab title="#{msg['tab.details']}">
+                    <p:dataTable value="#{dashboardBean.tableData}"
+                                 var="p"
+                                 paginator="true"
+                                 rows="10"
+                                 style="width:100%;">
 
-            </p:panel>
+                        <p:column headerText="#{msg['column.project']}">
+                            <h:outputText value="#{p.name}" />
+                        </p:column>
 
-        </h:form>
-    </h:body>
-    </html>
-</f:view>
+                        <p:column headerText="#{msg['column.languages']}">
+                            <h:outputText value="#{p.languages}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg['column.segments']}">
+                            <h:outputText value="#{p.segments}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg['column.progress']}">
+                            <h:outputText value="#{p.progressPercent}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg['column.createdAt']}">
+                            <h:outputText value="#{p.createdAt}" />
+                        </p:column>
+
+                        <p:column headerText="#{msg['column.completedAt']}">
+                            <h:outputText value="#{p.completedAt}" />
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
+
+            </p:tabView>
+
+        </p:panel>
+
+    </h:form>
+</h:body>
+</html>

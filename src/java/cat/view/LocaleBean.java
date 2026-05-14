@@ -10,35 +10,7 @@ import java.util.Locale;
 @SessionScoped
 public class LocaleBean implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    // language code: "bg", "en", "pt", "ar", "hy"
-    private String language = "bg";
-    private Locale currentLocale = new Locale(language);
-
-    public String changeLanguage() {
-        if (language == null || language.isEmpty()) {
-            language = "bg";
-        }
-        currentLocale = new Locale(language);
-        FacesContext.getCurrentInstance().getViewRoot().setLocale(currentLocale);
-
-        // след смяна на езика – redirect към dashboard
-        // за да се създаде ново view и да се rebuild-нат графиките
-        return "dashboard?faces-redirect=true";
-    }
-
-    public Locale getCurrentLocale() {
-        if (currentLocale == null) {
-            currentLocale = new Locale(language != null ? language : "bg");
-        }
-        return currentLocale;
-    }
-
-    public boolean isRtl() {
-        String lang = getCurrentLocale().getLanguage();
-        return "ar".equals(lang);
-    }
+    private String language = "en";
 
     public String getLanguage() {
         return language;
@@ -46,5 +18,28 @@ public class LocaleBean implements Serializable {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public Locale getCurrentLocale() {
+        if (language == null || language.trim().isEmpty()) {
+            language = "en";
+        }
+        return new Locale(language);
+    }
+
+    public void changeLanguage() {
+        FacesContext.getCurrentInstance()
+                .getViewRoot()
+                .setLocale(getCurrentLocale());
+    }
+
+    public String applyLanguage() {
+        changeLanguage();
+        return null;
+    }
+
+    public boolean isRtl() {
+        String lang = getCurrentLocale().getLanguage();
+        return "ar".equals(lang) || "he".equals(lang) || "iw".equals(lang);
     }
 }

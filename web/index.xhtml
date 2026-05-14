@@ -1,65 +1,64 @@
 <!DOCTYPE html>
-<f:view xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        xmlns:p="http://primefaces.org/ui"
-        locale="#{localeBean.currentLocale}">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      lang="#{localeBean.currentLocale.language}"
+      dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
 
-    <html lang="#{localeBean.currentLocale.language}"
-          dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
+<h:head>
+    <title>#{msg['index.title']}</title>
+    <h:outputStylesheet library="css" name="layout.css" />
+</h:head>
 
-    <h:head>
-        <title>#{msg['index.title']}</title>
-        <h:outputStylesheet library="css" name="layout.css"/>
-    </h:head>
+<h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
 
-    <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
+    <h:form id="indexForm">
+        <p:panel header="#{msg['index.header']}" style="max-width:600px; margin:2rem auto;">
 
-        <h:form id="indexForm">
-            <p:panel header="#{msg['index.header']}" style="max-width:600px;margin:2rem auto;">
+            <p:toolbar style="margin-bottom:1rem;">
+                <p:toolbarGroup align="right">
+                    <p:selectOneMenu id="localeMenu"
+                                     value="#{localeBean.language}"
+                                     style="min-width:170px;">
+                        <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
+                        <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
+                        <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
+                        <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
+                        <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
+                        <f:selectItem itemValue="he" itemLabel="#{msg['lang.he']}" />
+                    </p:selectOneMenu>
 
-                <p:toolbar style="margin-bottom:1rem;">
-                    <p:toolbarGroup align="right">
-                        <p:selectOneMenu id="localeMenu"
-                                         value="#{localeBean.language}"
-                                         style="min-width:170px;">
-                            <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
-                            <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
-                            <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
-                            <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
-                            <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
-                        </p:selectOneMenu>
+                    <p:spacer width="10" />
 
-<p:spacer width="10" />
+                    <p:commandButton value="#{msg['button.applyLanguage']}"
+                                     action="#{localeBean.applyLanguage}"
+                                     process="@this localeMenu"
+                                     ajax="false"
+                                     icon="pi pi-refresh"
+                                     styleClass="ui-button-secondary" />
+                </p:toolbarGroup>
+            </p:toolbar>
 
-<p:commandButton value="#{msg['button.applyLanguage']}"
-                 actionListener="#{localeBean.changeLanguage}"
-                 process="@form"
-                 ajax="false"
-                 icon="ui-icon-refresh"
-                 styleClass="ui-button-secondary" />
-                    </p:toolbarGroup>
-                </p:toolbar>
+            <h:outputText value="#{msg['index.welcome']}" />
+            <br /><br />
 
-                <h:outputText value="#{msg['index.welcome']}" />
-                <br/><br/>
+            <p:commandButton value="#{msg['button.help']}"
+                             action="help"
+                             process="@this"
+                             ajax="false"
+                             styleClass="ui-button-secondary"
+                             icon="pi pi-question-circle" />
 
-                <p:commandButton value="#{msg['button.help']}"
-                                 action="help"
-                                 process="@this"
-                                 ajax="false"
-                                 styleClass="ui-button-secondary"
-                                 icon="ui-icon-help" />
+            <p:spacer width="10" />
 
-                <p:spacer width="10"/>
+            <p:commandButton value="#{msg['button.login']}"
+                             action="login"
+                             process="@this"
+                             ajax="false"
+                             icon="pi pi-sign-in" />
+        </p:panel>
+    </h:form>
 
-                <p:commandButton value="#{msg['button.login']}"
-                                 action="login"
-                                 process="@this"
-                                 ajax="false"
-                                 icon="ui-icon-person" />
-            </p:panel>
-        </h:form>
-    </h:body>
-    </html>
-</f:view>
+</h:body>
+</html>

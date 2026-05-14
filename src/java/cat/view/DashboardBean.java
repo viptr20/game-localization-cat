@@ -17,7 +17,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.TreeMap;
 
 @ManagedBean(name = "dashboardBean")
 @ViewScoped
@@ -37,37 +42,73 @@ public class DashboardBean implements Serializable {
     private BarChartModel statusBarModel;
     private PieChartModel languagePieModel;
 
+    private String chartsLocale;
+
     @PostConstruct
     public void init() {
         loadProjects();
-        selectedProjectId = null;
         reloadAll();
     }
 
     public void reloadAll() {
         stats = dao.loadStats(selectedProjectId);
         loadTableData();
-        createRadarModel();
-        createStatusBarModel();
-        createLanguagePieModel();
+        chartsLocale = null;
     }
 
-    // helper за достъп до bundle "msg" от faces-config.xml
     private String msg(String key) {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             if (context == null) {
                 return key;
             }
+
             Application app = context.getApplication();
             ResourceBundle bundle = app.getResourceBundle(context, "msg");
+
             if (bundle != null && bundle.containsKey(key)) {
                 return bundle.getString(key);
             }
         } catch (Exception e) {
-            // ignore, fall back
+            // fallback below
         }
         return "???" + key + "???";
+    }
+
+    private boolean hasKey(String key) {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            if (context == null) {
+                return false;
+            }
+
+            Application app = context.getApplication();
+            ResourceBundle bundle = app.getResourceBundle(context, "msg");
+            return bundle != null && bundle.containsKey(key);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private String currentLanguage() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context != null && context.getViewRoot() != null) {
+            Locale locale = context.getViewRoot().getLocale();
+            if (locale != null && locale.getLanguage() != null && !locale.getLanguage().trim().isEmpty()) {
+                return locale.getLanguage();
+            }
+        }
+        return "en";
+    }
+
+    private void ensureChartsLocale() {
+        String current = currentLanguage();
+        if (chartsLocale == null || !chartsLocale.equals(current)) {
+            createRadarModel();
+            createStatusBarModel();
+            createLanguagePieModel();
+            chartsLocale = current;
+        }
     }
 
     private void loadProjects() {
@@ -94,7 +135,6 @@ public class DashboardBean implements Serializable {
         }
     }
 
-    // Radar chart – Project Profile
     private void createRadarModel() {
         radarModel = new RadarChartModel();
 
@@ -112,7 +152,6 @@ public class DashboardBean implements Serializable {
         labels.add(msg("chart.percentDone"));
         labels.add(msg("chart.volumeScore"));
 
-        // ВАЖНО: keys от DAO могат да останат на английски – те са вътрешни
         values.add(radarData.getOrDefault("Completion %", 0));
         values.add(radarData.getOrDefault("New %", 0));
         values.add(radarData.getOrDefault("In Progress %", 0));
@@ -135,9 +174,9 @@ public class DashboardBean implements Serializable {
         radarModel.setData(data);
     }
 
-    // Bar chart – Segment Status
     private void createStatusBarModel() {
         statusBarModel = new BarChartModel();
+
         ChartSeries series = new ChartSeries();
         series.setLabel(msg("chart.dataset.segments"));
 
@@ -153,15 +192,15 @@ public class DashboardBean implements Serializable {
         statusBarModel.setAnimate(true);
     }
 
-    // Pie chart – Language Split
     private void createLanguagePieModel() {
         languagePieModel = new PieChartModel();
+
         Map<String, Integer> data = dao.loadLanguageSplit(selectedProjectId);
 
-        if (data.isEmpty()) {
-            languagePieModel.set(msg("chart.noData"), 1);
+        if (data == null || data.isEmpty()) {
+            String noDataLabel = hasKey("chart.noData") ? msg("chart.noData") : "No data";
+            languagePieModel.set(noDataLabel, 1);
         } else {
-            // По желание – сортиране на ключовете за по-постоянен ред
             Map<String, Integer> ordered = new TreeMap<>(data);
             for (Map.Entry<String, Integer> e : ordered.entrySet()) {
                 languagePieModel.set(e.getKey(), e.getValue());
@@ -177,9 +216,8 @@ public class DashboardBean implements Serializable {
         reloadAll();
     }
 
-    // по избор – ако искаш да викаш ръчно след смяна на език без redirect
     public void refreshForLocaleChange() {
-        reloadAll();
+        chartsLocale = null;
     }
 
     public DashboardStats getStats() {
@@ -206,28 +244,32 @@ public class DashboardBean implements Serializable {
     }
 
     public RadarChartModel getRadarModel() {
+        ensureChartsLocale();
         return radarModel;
     }
 
     public BarChartModel getStatusBarModel() {
+        ensureChartsLocale();
         return statusBarModel;
     }
 
     public PieChartModel getLanguagePieModel() {
+        ensureChartsLocale();
         return languagePieModel;
     }
 
     public List<ProjectSelectItem> getProjects() {
         List<ProjectSelectItem> list = new ArrayList<>();
+
         if (projectsMap != null) {
             for (Map.Entry<Integer, String> e : projectsMap.entrySet()) {
                 list.add(new ProjectSelectItem(e.getKey(), e.getValue()));
             }
         }
+
         return list;
     }
 
-    // DTO за таблицата
     public static class ProjectRow implements Serializable {
         private final int id;
         private final String name;
@@ -249,16 +291,35 @@ public class DashboardBean implements Serializable {
             this.completedAt = completedAt;
         }
 
-        public int getId() { return id; }
-        public String getName() { return name; }
-        public String getLanguages() { return languages; }
-        public int getSegments() { return segments; }
-        public int getProgressPercent() { return progressPercent; }
-        public String getCreatedAt() { return createdAt; }
-        public String getCompletedAt() { return completedAt; }
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getLanguages() {
+            return languages;
+        }
+
+        public int getSegments() {
+            return segments;
+        }
+
+        public int getProgressPercent() {
+            return progressPercent;
+        }
+
+        public String getCreatedAt() {
+            return createdAt;
+        }
+
+        public String getCompletedAt() {
+            return completedAt;
+        }
     }
 
-    // DTO за selectOneMenu
     public static class ProjectSelectItem implements Serializable {
         private final Integer id;
         private final String name;
@@ -268,7 +329,12 @@ public class DashboardBean implements Serializable {
             this.name = name;
         }
 
-        public Integer getId() { return id; }
-        public String getName() { return name; }
+        public Integer getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }

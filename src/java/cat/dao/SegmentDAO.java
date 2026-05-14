@@ -27,11 +27,14 @@ public class SegmentDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(new Segment(
-                            rs.getInt("id"),
-                            rs.getInt("project_id"),
-                            rs.getString("source_text"),
-                            rs.getString("target_text"),
-                            rs.getString("status")
+                        rs.getInt("id"),
+                        rs.getInt("project_id"),
+                        rs.getString("language_pair"),
+                        rs.getString("source_text"),
+                        rs.getString("target_text"),
+                        rs.getString("status"),
+                        rs.getTimestamp("created_at"),
+                        rs.getTimestamp("completed_at")
                     ));
                 }
             }

@@ -32,6 +32,8 @@
             <supported-locale>pt</supported-locale>
             <supported-locale>ar</supported-locale>
             <supported-locale>hy</supported-locale>
+            <supported-locale>he</supported-locale>
+            <supported-locale>iw</supported-locale>
         </locale-config>
 
         <resource-bundle>

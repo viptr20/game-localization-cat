@@ -1,97 +1,167 @@
 <!DOCTYPE html>
-<f:view xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        xmlns:p="http://primefaces.org/ui"
-        locale="#{localeBean.currentLocale}">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="#{localeBean.currentLocale.language}"
+      dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
 
-    <f:metadata>
-        <f:viewParam name="projectId" value="#{projectEditorBean.projectId}" />
-        <f:event type="preRenderView" listener="#{projectEditorBean.init}" />
-    </f:metadata>
+<f:metadata>
+    <f:viewParam name="projectId" value="#{projectEditorBean.projectId}" />
+    <f:event type="preRenderView" listener="#{projectEditorBean.init}" />
+</f:metadata>
 
-    <html lang="#{localeBean.currentLocale.language}"
-          dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
+<h:head>
+    <title>#{msg['projectEditor.title']}</title>
+    <h:outputStylesheet library="css" name="layout.css" />
+</h:head>
 
-    <h:head>
-        <title>#{msg['projectEditor.title']}</title>
-        <h:outputStylesheet library="css" name="layout.css" />
-    </h:head>
+<h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
 
-    <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
-        <h:form id="editorForm">
-            <p:panel header="#{msg['projectEditor.header']}" style="margin:1rem;">
+    <h:form id="editorForm">
+        <p:panel header="#{msg['projectEditor.header']}" style="margin:1rem;">
 
-                <p:toolbar style="margin-bottom:1rem;">
-                    <p:toolbarGroup align="right">
-                        <p:selectOneMenu id="localeMenu"
-                                         value="#{localeBean.language}"
-                                         style="min-width:170px;">
-                            <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
-                            <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
-                            <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
-                            <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
-                            <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
-                            <p:ajax listener="#{localeBean.changeLanguage}" update="@all" />
-                        </p:selectOneMenu>
-                    </p:toolbarGroup>
-                </p:toolbar>
+            <p:toolbar style="margin-bottom:1rem;">
+                <p:toolbarGroup align="right">
+                    <p:selectOneMenu id="localeMenu"
+                                     value="#{localeBean.language}"
+                                     style="min-width:170px;">
+                        <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
+                        <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
+                        <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
+                        <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
+                        <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
+                        <f:selectItem itemValue="he" itemLabel="#{msg['lang.he']}" />
+                    </p:selectOneMenu>
 
-                <p:messages id="messages" showDetail="true" closable="true" />
+                    <p:spacer width="10" />
 
-                <h:outputText value="#{msg['projectEditor.projectId']} #{projectEditorBean.projectId}" />
-                <br/><br/>
+                    <p:commandButton value="#{msg['button.applyLanguage']}"
+                                     action="#{localeBean.applyLanguage}"
+                                     process="@form"
+                                     update="@form"
+                                     ajax="false"
+                                     icon="pi pi-refresh"
+                                     styleClass="ui-button-secondary" />
+                </p:toolbarGroup>
+            </p:toolbar>
 
-                <p:dataTable value="#{projectEditorBean.segments}"
-                             var="seg"
-                             style="width:100%;">
+            <p:messages id="messages" showDetail="true" closable="true" />
 
-                    <p:column headerText="#{msg['column.id']}">
-                        <h:outputText value="#{seg.id}" />
-                    </p:column>
+            <h:outputText value="#{msg['projectEditor.projectId']} #{projectEditorBean.projectId}" />
+            <br /><br />
 
-                    <p:column headerText="#{msg['column.source']}">
-                        <h:outputText value="#{seg.sourceText}" />
-                    </p:column>
+            <p:dataTable id="segmentsTable"
+                         value="#{projectEditorBean.segments}"
+                         var="seg"
+                         style="width:100%;"
+                         selectionMode="single"
+                         rowKey="#{seg.id}"
+                         selection="#{projectEditorBean.selectedSegment}">
 
-                    <p:column headerText="#{msg['column.target']}">
-                        <p:inputTextarea value="#{seg.targetText}"
-                                         autoResize="true"
-                                         rows="3"
-                                         style="width:100%;" />
-                    </p:column>
+                <p:column headerText="#{msg['column.id']}">
+                    <h:outputText value="#{seg.id}" />
+                </p:column>
 
-                    <p:column headerText="#{msg['column.status']}">
-                        <p:selectOneMenu value="#{seg.status}" style="width:100%;">
-                            <f:selectItem itemLabel="#{msg['status.new']}" itemValue="NEW" />
-                            <f:selectItem itemLabel="#{msg['status.inProgress']}" itemValue="IN_PROGRESS" />
-                            <f:selectItem itemLabel="#{msg['status.done']}" itemValue="DONE" />
-                        </p:selectOneMenu>
-                    </p:column>
+                <p:column headerText="#{msg['column.source']}">
+                    <h:outputText value="#{seg.sourceText}" />
+                </p:column>
 
-                </p:dataTable>
+                <p:column headerText="#{msg['column.target']}">
+                    <p:inputTextarea value="#{seg.targetText}"
+                                     autoResize="true"
+                                     rows="3"
+                                     style="width:100%;" />
+                </p:column>
 
-                <br/>
+                <p:column headerText="#{msg['column.status']}">
+                    <p:selectOneMenu value="#{seg.status}" style="width:100%;">
+                        <f:selectItem itemLabel="#{msg['status.new']}" itemValue="NEW" />
+                        <f:selectItem itemLabel="#{msg['status.inProgress']}" itemValue="IN_PROGRESS" />
+                        <f:selectItem itemLabel="#{msg['status.done']}" itemValue="DONE" />
+                    </p:selectOneMenu>
+                </p:column>
 
-                <p:commandButton value="#{msg['button.save']}"
-                                 action="#{projectEditorBean.save}"
-                                 process="@form"
-                                 update="@form"
-                                 icon="ui-icon-disk" />
+            </p:dataTable>
 
-                <p:spacer width="10"/>
+            <br />
 
-                <p:commandButton value="#{msg['button.back']}"
-                                 action="back"
-                                 process="@this"
-                                 ajax="false"
-                                 styleClass="ui-button-secondary"
-                                 icon="ui-icon-arrowreturnthick-1-w">
-                    <f:param name="projectId" value="#{projectEditorBean.projectId}" />
-                </p:commandButton>
+            <p:commandButton value="Semantic Dictionary"
+                             icon="pi pi-search"
+                             actionListener="#{projectEditorBean.loadSemanticSuggestions}"
+                             process="@this"
+                             update="semanticDialog messages"
+                             oncomplete="PF('semanticDlg').show()"
+                             disabled="#{empty projectEditorBean.selectedSegment}" />
 
-            </p:panel>
-        </h:form>
-    </h:body>
-    </html>
-</f:view>
+            <p:spacer width="10" />
+
+            <p:commandButton value="#{msg['button.save']}"
+                             action="#{projectEditorBean.save}"
+                             process="@form"
+                             update="@form"
+                             icon="pi pi-save" />
+
+            <p:spacer width="10" />
+
+            <p:commandButton value="#{msg['button.back']}"
+                             action="back"
+                             process="@this"
+                             ajax="false"
+                             styleClass="ui-button-secondary"
+                             icon="pi pi-arrow-left">
+                <f:param name="projectId" value="#{projectEditorBean.projectId}" />
+            </p:commandButton>
+
+            <p:dialog id="semanticDialog"
+                      header="Semantic Dictionary"
+                      widgetVar="semanticDlg"
+                      modal="true"
+                      resizable="true"
+                      width="600">
+
+                <h:panelGroup id="semanticDialogContent" layout="block">
+
+                    <ui:fragment rendered="#{not empty projectEditorBean.selectedSegment}">
+                        <h:panelGrid columns="2" cellpadding="6" style="width:100%;">
+                            <h:outputText value="Source:" />
+                            <h:outputText value="#{projectEditorBean.selectedSegment.sourceText}" />
+
+                            <h:outputText value="Language pair:" />
+                            <h:outputText value="#{projectEditorBean.selectedSegment.languagePair}" />
+
+                            <h:outputText value="Status:" />
+                            <h:outputText value="#{projectEditorBean.selectedSegment.status}" />
+                        </h:panelGrid>
+
+                        <br />
+
+                        <h:outputText value="Suggestions:" style="font-weight:bold;" />
+                        <br /><br />
+
+                        <ui:fragment rendered="#{not empty projectEditorBean.semanticSuggestions}">
+                            <p:dataList value="#{projectEditorBean.semanticSuggestions}"
+                                        var="sug"
+                                        type="unordered">
+                                <h:outputText value="#{sug}" />
+                            </p:dataList>
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{empty projectEditorBean.semanticSuggestions}">
+                            <h:outputText value="No suggestions available." />
+                        </ui:fragment>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{empty projectEditorBean.selectedSegment}">
+                        <h:outputText value="No segment selected." />
+                    </ui:fragment>
+
+                </h:panelGroup>
+            </p:dialog>
+
+        </p:panel>
+    </h:form>
+
+</h:body>
+</html>

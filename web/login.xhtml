@@ -1,82 +1,91 @@
 <!DOCTYPE html>
-<f:view xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        xmlns:p="http://primefaces.org/ui"
-        locale="#{localeBean.currentLocale}">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      lang="#{localeBean.currentLocale.language}"
+      dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
 
-    <html lang="#{localeBean.currentLocale.language}"
-          dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
+<h:head>
+    <title>#{msg['login.title']}</title>
+    <h:outputStylesheet library="css" name="layout.css" />
+</h:head>
 
-    <h:head>
-        <title>#{msg['login.title']}</title>
-        <h:outputStylesheet library="css" name="layout.css" />
-    </h:head>
+<h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
+    <h:form id="loginForm">
+        <p:panel header="#{msg['login.header']}" style="max-width:400px;margin:2rem auto;">
 
-    <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
-        <h:form id="loginForm">
-            <p:panel header="#{msg['login.header']}" style="max-width:400px;margin:2rem auto;">
+            <p:toolbar style="margin-bottom:1rem;">
+                <p:toolbarGroup align="right">
+                    <p:selectOneMenu id="localeMenu"
+                                     value="#{localeBean.language}"
+                                     style="min-width:170px;">
+                        <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
+                        <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
+                        <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
+                        <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
+                        <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
+                        <f:selectItem itemValue="he" itemLabel="#{msg['lang.he']}" />
+                    </p:selectOneMenu>
 
-                <p:toolbar style="margin-bottom:1rem;">
-                    <p:toolbarGroup align="right">
-                        <p:selectOneMenu id="localeMenu"
-                                         value="#{localeBean.language}"
-                                         style="min-width:170px;">
-                            <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
-                            <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
-                            <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
-                            <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
-                            <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
-                            <p:ajax listener="#{localeBean.changeLanguage}" update="@all" />
-                        </p:selectOneMenu>
-                    </p:toolbarGroup>
-                </p:toolbar>
+                    <p:spacer width="10" />
 
-                <p:messages id="messages" showDetail="true" closable="true" />
+                    <p:commandButton value="#{msg['button.applyLanguage']}"
+                                     action="#{localeBean.applyLanguage}"
+                                     process="@this"
+                                     immediate="true"
+                                     ajax="false"
+                                     icon="pi pi-refresh"
+                                     styleClass="ui-button-secondary" />
+                </p:toolbarGroup>
+            </p:toolbar>
 
-                <p:outputLabel for="user" value="#{msg['label.username']}" />
-                <p:inputText id="user"
-                             value="#{loginBean.username}"
-                             style="width:100%;"
-                             required="true"
-                             requiredMessage="#{msg['validation.usernameRequired']}" />
+            <p:messages id="messages" showDetail="true" closable="true" />
 
-                <br/><br/>
+            <p:outputLabel for="user" value="#{msg['label.username']}" />
+            <p:inputText id="user"
+                         value="#{loginBean.username}"
+                         style="width:100%;"
+                         required="true"
+                         requiredMessage="#{msg['validation.usernameRequired']}" />
 
-                <p:outputLabel for="pwd" value="#{msg['label.password']}" />
-                <p:password id="pwd"
-                            value="#{loginBean.password}"
-                            feedback="false"
-                            style="width:100%;"
-                            required="true"
-                            requiredMessage="#{msg['validation.passwordRequired']}" />
+            <br /><br />
 
-                <br/><br/>
+            <p:outputLabel for="pwd" value="#{msg['label.password']}" />
+            <p:password id="pwd"
+                        value="#{loginBean.password}"
+                        feedback="false"
+                        style="width:100%;"
+                        required="true"
+                        requiredMessage="#{msg['validation.passwordRequired']}" />
 
-                <p:commandButton value="#{msg['button.login']}"
-                                 action="#{loginBean.doLogin}"
-                                 process="@form"
-                                 update="@form"
-                                 ajax="false"
-                                 icon="ui-icon-person" />
+            <br /><br />
 
-                <p:spacer width="10"/>
+            <p:commandButton value="#{msg['button.login']}"
+                             action="#{loginBean.doLogin}"
+                             process="@form"
+                             update="@form"
+                             ajax="false"
+                             icon="pi pi-sign-in" />
 
-                <p:commandButton value="#{msg['button.forgotPassword']}"
-                                 action="#{loginBean.goToForgotPassword}"
-                                 process="@this"
-                                 update="@none"
-                                 ajax="false"
-                                 immediate="true"
-                                 styleClass="ui-button-secondary"
-                                 icon="ui-icon-help" />
-                <br/><br/>
+            <p:spacer width="10" />
 
-                <p:button value="#{msg['button.backHome']}"
-                          outcome="index"
-                          icon="ui-icon-home" />
-            </p:panel>
-        </h:form>
-    </h:body>
-    </html>
-</f:view>
+            <p:commandButton value="#{msg['button.forgotPassword']}"
+                             action="#{loginBean.goToForgotPassword}"
+                             process="@this"
+                             update="@none"
+                             ajax="false"
+                             immediate="true"
+                             styleClass="ui-button-secondary"
+                             icon="pi pi-key" />
+
+            <br /><br />
+
+            <p:button value="#{msg['button.backHome']}"
+                      outcome="index"
+                      icon="pi pi-home"
+                      styleClass="ui-button-secondary" />
+        </p:panel>
+    </h:form>
+</h:body>
+</html>

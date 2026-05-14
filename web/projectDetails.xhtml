@@ -32,8 +32,17 @@
                             <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
                             <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
                             <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
-                            <p:ajax listener="#{localeBean.changeLanguage}" update="@all" />
+                            <f:selectItem itemValue="he" itemLabel="#{msg['lang.he']}" />
                         </p:selectOneMenu>
+
+                        <p:spacer width="10" />
+
+                        <p:commandButton value="#{msg['button.applyLanguage']}"
+                                         action="#{localeBean.applyLanguage}"
+                                         process="@form"
+                                         ajax="false"
+                                         icon="pi pi-refresh"
+                                         styleClass="ui-button-secondary" />
                     </p:toolbarGroup>
                 </p:toolbar>
 
@@ -54,34 +63,34 @@
                     <h:outputText value="#{projectDetailsBean.project.description}" />
                 </h:panelGrid>
 
-                <br/>
+                <br />
 
                 <p:commandButton value="#{msg['button.edit']}"
                                  action="edit"
                                  process="@this"
                                  ajax="false"
-                                 icon="ui-icon-pencil">
+                                 icon="pi pi-pencil">
                     <f:param name="projectId" value="#{projectDetailsBean.projectId}" />
                 </p:commandButton>
 
-                <p:spacer width="10"/>
+                <p:spacer width="10" />
 
                 <p:commandButton value="#{msg['button.review']}"
                                  action="review"
                                  process="@this"
                                  ajax="false"
-                                 icon="ui-icon-check">
+                                 icon="pi pi-check">
                     <f:param name="projectId" value="#{projectDetailsBean.projectId}" />
                 </p:commandButton>
 
-                <p:spacer width="10"/>
+                <p:spacer width="10" />
 
                 <p:commandButton value="#{msg['button.back']}"
                                  action="back"
                                  process="@this"
                                  ajax="false"
                                  styleClass="ui-button-secondary"
-                                 icon="ui-icon-arrowreturnthick-1-w" />
+                                 icon="pi pi-arrow-left" />
             </p:panel>
         </h:form>
     </h:body>
