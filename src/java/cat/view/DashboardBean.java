@@ -17,12 +17,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.TreeMap;
+import java.util.*;
 
 @ManagedBean(name = "dashboardBean")
 @ViewScoped
@@ -94,7 +89,8 @@ public class DashboardBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         if (context != null && context.getViewRoot() != null) {
             Locale locale = context.getViewRoot().getLocale();
-            if (locale != null && locale.getLanguage() != null && !locale.getLanguage().trim().isEmpty()) {
+            if (locale != null && locale.getLanguage() != null
+                    && !locale.getLanguage().trim().isEmpty()) {
                 return locale.getLanguage();
             }
         }
@@ -182,9 +178,9 @@ public class DashboardBean implements Serializable {
 
         Map<String, Integer> data = dao.loadStatusCounts(selectedProjectId);
 
-        series.set(msg("status.new"), data.getOrDefault("NEW", 0));
+        series.set(msg("status.new"),        data.getOrDefault("NEW", 0));
         series.set(msg("status.inProgress"), data.getOrDefault("IN_PROGRESS", 0));
-        series.set(msg("status.done"), data.getOrDefault("DONE", 0));
+        series.set(msg("status.done"),       data.getOrDefault("DONE", 0));
 
         statusBarModel.addSeries(series);
         statusBarModel.setTitle(msg("chart.segmentStatus"));
@@ -208,12 +204,14 @@ public class DashboardBean implements Serializable {
         }
 
         languagePieModel.setTitle(msg("chart.languageSplit"));
-        languagePieModel.setLegendPosition("w");
+        // legend inside the chart area, to the right of the pie
+        languagePieModel.setLegendPosition("e");
         languagePieModel.setShowDataLabels(true);
     }
 
     public void onProjectChange() {
         reloadAll();
+        ensureChartsLocale();
     }
 
     public void refreshForLocaleChange() {
@@ -224,11 +222,11 @@ public class DashboardBean implements Serializable {
         return stats;
     }
 
-    public int getCompletedPercent() {
+    public double getCompletedPercent() {
         if (stats == null || stats.getTotalSegments() == 0) {
-            return 0;
+            return 0.0;
         }
-        return (int) Math.round(100.0 * stats.getDoneSegments() / stats.getTotalSegments());
+        return 100.0 * stats.getDoneSegments() / stats.getTotalSegments();
     }
 
     public Integer getSelectedProjectId() {
@@ -291,33 +289,13 @@ public class DashboardBean implements Serializable {
             this.completedAt = completedAt;
         }
 
-        public int getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getLanguages() {
-            return languages;
-        }
-
-        public int getSegments() {
-            return segments;
-        }
-
-        public int getProgressPercent() {
-            return progressPercent;
-        }
-
-        public String getCreatedAt() {
-            return createdAt;
-        }
-
-        public String getCompletedAt() {
-            return completedAt;
-        }
+        public int getId() { return id; }
+        public String getName() { return name; }
+        public String getLanguages() { return languages; }
+        public int getSegments() { return segments; }
+        public int getProgressPercent() { return progressPercent; }
+        public String getCreatedAt() { return createdAt; }
+        public String getCompletedAt() { return completedAt; }
     }
 
     public static class ProjectSelectItem implements Serializable {
@@ -329,12 +307,7 @@ public class DashboardBean implements Serializable {
             this.name = name;
         }
 
-        public Integer getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
+        public Integer getId() { return id; }
+        public String getName() { return name; }
     }
 }

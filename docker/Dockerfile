@@ -1,9 +1,9 @@
-FROM payara/server-full:5.2022.5
-
-COPY target/CAT.war $PAYARA_PATH/glassfish/domains/domain1/autodeploy/ROOT.war
-
-COPY docker/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["startInForeground"]
+FROM payara/server-full:5.2022.5-jdk11
+USER root
+RUN mkdir -p /opt/payara/deployments \
+/opt/payara/appserver/glassfish/domains/domain1/osgi-cache \
+/opt/payara/appserver/glassfish/domains/domain1/generated \
+&& chown -R payara:payara /opt/payara/appserver/glassfish /opt/payara/deployments
+COPY dist/*.war /opt/payara/deployments/app.war
+USER payara
+EXPOSE 8080 4848

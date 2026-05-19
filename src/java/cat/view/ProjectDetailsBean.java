@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSF/JSFManagedBean.java to edit this template
- */
 package cat.view;
 
 import cat.dao.ProjectDAO;
@@ -16,21 +12,30 @@ import java.io.Serializable;
 @ViewScoped
 public class ProjectDetailsBean implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private int projectId;
     private Project project;
 
-    private ProjectDAO dao = new ProjectDAO();
+    private final ProjectDAO dao = new ProjectDAO();
 
     @PostConstruct
     public void init() {
+        // Actual loading is done in load(), called from preRenderView
+    }
+
+    public void load() {
         if (projectId > 0) {
             project = dao.findById(projectId);
+        } else {
+            project = null;
         }
     }
 
     public int getProjectId() {
         return projectId;
     }
+
     public void setProjectId(int projectId) {
         this.projectId = projectId;
     }

@@ -15,6 +15,7 @@
     <h:form id="projectsForm">
         <p:panel header="#{msg['projects.header']}" style="margin:1rem;">
 
+            <!-- Toolbar with language selector -->
             <p:toolbar style="margin-bottom:1rem;">
                 <p:toolbarGroup align="right">
                     <p:selectOneMenu id="localeMenu"
@@ -39,6 +40,7 @@
                 </p:toolbarGroup>
             </p:toolbar>
 
+            <!-- Projects table -->
             <p:dataTable value="#{projectsBean.projects}"
                          var="prj"
                          paginator="true"
@@ -66,19 +68,18 @@
                 </p:column>
 
                 <p:column headerText="#{msg['column.actions']}">
-                    <p:commandButton value="#{msg['button.details']}"
-                                     action="details"
-                                     process="@this"
-                                     ajax="false"
-                                     icon="pi pi-search">
+                    <!-- Plain link to details with projectId as query param -->
+                    <h:outputLink value="/index/projectDetails.xhtml">
                         <f:param name="projectId" value="#{prj.id}" />
-                    </p:commandButton>
+                        #{msg['button.details']}
+                    </h:outputLink>
                 </p:column>
 
             </p:dataTable>
 
             <br />
 
+            <!-- Back to dashboard using existing navigation rule -->
             <p:commandButton value="#{msg['button.backToDashboard']}"
                              action="back"
                              process="@this"

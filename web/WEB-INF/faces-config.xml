@@ -1,29 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!--
-
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
-
--->
 <faces-config version="2.3"
               xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd">
-    
+
     <application>
         <locale-config>
             <default-locale>en</default-locale>
@@ -41,7 +21,8 @@
             <var>msg</var>
         </resource-bundle>
     </application>
-    
+
+    <!-- index.xhtml -->
     <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
@@ -53,6 +34,8 @@
             <to-view-id>/login.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
+    <!-- login.xhtml -->
     <navigation-rule>
         <from-view-id>/login.xhtml</from-view-id>
         <navigation-case>
@@ -68,6 +51,8 @@
             <to-view-id>/forgotPassword.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
+    <!-- dashboard.xhtml -->
     <navigation-rule>
         <from-view-id>/dashboard.xhtml</from-view-id>
         <navigation-case>
@@ -79,6 +64,8 @@
             <to-view-id>/projects.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
+    <!-- help.xhtml -->
     <navigation-rule>
         <from-view-id>/help.xhtml</from-view-id>
         <navigation-case>
@@ -86,6 +73,8 @@
             <to-view-id>/forgotPassword.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
+    <!-- projects.xhtml -->
     <navigation-rule>
         <from-view-id>/projects.xhtml</from-view-id>
         <navigation-case>
@@ -97,6 +86,8 @@
             <to-view-id>/dashboard.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
+    <!-- projectDetails.xhtml -->
     <navigation-rule>
         <from-view-id>/projectDetails.xhtml</from-view-id>
         <navigation-case>
@@ -112,6 +103,8 @@
             <to-view-id>/projects.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
+    <!-- userProfile.xhtml -->
     <navigation-rule>
         <from-view-id>/userProfile.xhtml</from-view-id>
         <navigation-case>
@@ -119,6 +112,8 @@
             <to-view-id>/dashboard.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
+    <!-- projectEditor.xhtml -->
     <navigation-rule>
         <from-view-id>/projectEditor.xhtml</from-view-id>
         <navigation-case>
@@ -126,6 +121,8 @@
             <to-view-id>/projectDetails.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
+    <!-- review.xhtml -->
     <navigation-rule>
         <from-view-id>/review.xhtml</from-view-id>
         <navigation-case>
@@ -133,4 +130,5 @@
             <to-view-id>/projectDetails.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
+
 </faces-config>

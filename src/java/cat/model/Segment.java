@@ -1,8 +1,11 @@
 package cat.model;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.sql.Timestamp;
 
-public class Segment {
+public class Segment implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int id;
     private int projectId;
@@ -10,18 +13,20 @@ public class Segment {
     private String sourceText;
     private String targetText;
     private String status;
-    private Date createdAt;
-    private Date completedAt;
+    private Timestamp createdAt;
+    private Timestamp completedAt;
 
-    // Основен конструктор – за DAO
+    public Segment() {
+    }
+
     public Segment(int id,
                    int projectId,
                    String languagePair,
                    String sourceText,
                    String targetText,
                    String status,
-                   Date createdAt,
-                   Date completedAt) {
+                   Timestamp createdAt,
+                   Timestamp completedAt) {
         this.id = id;
         this.projectId = projectId;
         this.languagePair = languagePair;
@@ -30,15 +35,6 @@ public class Segment {
         this.status = status;
         this.createdAt = createdAt;
         this.completedAt = completedAt;
-    }
-
-    // Допълнителен конструктор за съвместимост
-    public Segment(int id,
-                   int projectId,
-                   String sourceText,
-                   String targetText,
-                   String status) {
-        this(id, projectId, null, sourceText, targetText, status, null, null);
     }
 
     public int getId() {
@@ -89,19 +85,41 @@ public class Segment {
         this.status = status;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getCompletedAt() {
+    public Timestamp getCompletedAt() {
         return completedAt;
     }
 
-    public void setCompletedAt(Date completedAt) {
+    public void setCompletedAt(Timestamp completedAt) {
         this.completedAt = completedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Segment)) return false;
+        Segment other = (Segment) o;
+        return this.id == other.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Segment{id=" + id +
+                ", projectId=" + projectId +
+                ", languagePair='" + languagePair + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

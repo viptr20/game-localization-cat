@@ -28,6 +28,18 @@
             <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/SegmentDAO.java</file>
             <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/UserDAO.java</file>
             <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/model/Segment.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/LocaleBean.java</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages.properties</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_ar.properties</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_bg.properties</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_en.properties</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_hy.properties</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_pt.properties</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/index.jsp</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_he.properties</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_iw.properties</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/WEB-INF/glassfish-web.xml</file>
+            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
 </project-private>

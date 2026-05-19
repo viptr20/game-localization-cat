@@ -9,18 +9,19 @@ import java.util.*;
 public class DashboardDAO {
 
     public DashboardDAO() {
-        // без JNDI тук – DBUtil решава дали да ползва JNDI или директен JDBC
+        // DBUtil decides whether to use JNDI or direct JDBC
     }
 
     private Connection getConnection() throws SQLException {
         return DBUtil.getConnection();
     }
 
-    /* ===================== Проекти ===================== */
+    /* ===================== Projects ===================== */
 
     public Map<Integer, String> loadProjects() {
         String sql = "SELECT id, name FROM projects ORDER BY id";
-        Map<Integer, String> result = new LinkedHashMap<Integer, String>();
+
+        Map<Integer, String> result = new LinkedHashMap<>();
 
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -41,7 +42,9 @@ public class DashboardDAO {
             "       p.name, " +
             "       CONCAT(p.source_lang, ' -> ', p.target_langs) AS languages, " +
             "       COUNT(s.id) AS segments, " +
-            "       COALESCE(ROUND(100.0 * SUM(CASE WHEN s.status = 'DONE' THEN 1 ELSE 0 END) / NULLIF(COUNT(s.id),0)), 0) AS progress_percent, " +
+            "       COALESCE(ROUND(100.0 * " +
+            "           SUM(CASE WHEN s.status = 'DONE' THEN 1 ELSE 0 END) / NULLIF(COUNT(s.id),0)" +
+            "       ), 0) AS progress_percent, " +
             "       p.created_at, " +
             "       p.completed_at " +
             "FROM projects p " +
@@ -49,7 +52,7 @@ public class DashboardDAO {
             "GROUP BY p.id, p.name, p.source_lang, p.target_langs, p.created_at, p.completed_at " +
             "ORDER BY p.id";
 
-        List<ProjectRowDTO> list = new ArrayList<ProjectRowDTO>();
+        List<ProjectRowDTO> list = new ArrayList<>();
 
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql);
@@ -77,7 +80,10 @@ public class DashboardDAO {
     public DashboardStats loadStats(Integer projectId) {
         DashboardStats stats = new DashboardStats();
         try (Connection con = getConnection()) {
+            // totalProjects = all projects in table
             stats.setTotalProjects(countProjects(con));
+
+            // segment counts, optionally filtered by project
             stats.setTotalSegments(countSegments(con, projectId, null));
             stats.setNewSegments(countSegments(con, projectId, "NEW"));
             stats.setInProgressSegments(countSegments(con, projectId, "IN_PROGRESS"));
@@ -89,7 +95,8 @@ public class DashboardDAO {
     }
 
     private int countProjects(Connection con) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM projects");
+        String sql = "SELECT COUNT(*) FROM projects";
+        try (PreparedStatement ps = con.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             return rs.next() ? rs.getInt(1) : 0;
         }
@@ -118,7 +125,7 @@ public class DashboardDAO {
         }
     }
 
-    /* ===================== Данни за графики ===================== */
+    /* ===================== Chart Data ===================== */
 
     public Map<String, Integer> loadStatusCounts(Integer projectId) {
         String sql =
@@ -127,7 +134,7 @@ public class DashboardDAO {
             "WHERE (? IS NULL OR project_id = ?) " +
             "GROUP BY status";
 
-        Map<String, Integer> result = new LinkedHashMap<String, Integer>();
+        Map<String, Integer> result = new LinkedHashMap<>();
 
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -159,7 +166,7 @@ public class DashboardDAO {
             "GROUP BY COALESCE(language_pair, 'Unknown') " +
             "ORDER BY lang";
 
-        Map<String, Integer> result = new LinkedHashMap<String, Integer>();
+        Map<String, Integer> result = new LinkedHashMap<>();
 
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -192,7 +199,7 @@ public class DashboardDAO {
             "FROM segments " +
             "WHERE (? IS NULL OR project_id = ?)";
 
-        Map<String, Integer> result = new LinkedHashMap<String, Integer>();
+        Map<String, Integer> result = new LinkedHashMap<>();
 
         try (Connection con = getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -212,10 +219,20 @@ public class DashboardDAO {
                     int inProgressCount = rs.getInt("in_progress_count");
                     int doneCount = rs.getInt("done_count");
 
-                    int completionPercent = total > 0 ? (int) Math.round((doneCount * 100.0) / total) : 0;
-                    int newPercent = total > 0 ? (int) Math.round((newCount * 100.0) / total) : 0;
-                    int inProgressPercent = total > 0 ? (int) Math.round((inProgressCount * 100.0) / total) : 0;
-                    int donePercent = total > 0 ? (int) Math.round((doneCount * 100.0) / total) : 0;
+                    int completionPercent = total > 0
+                            ? (int) Math.round((doneCount * 100.0) / total)
+                            : 0;
+                    int newPercent = total > 0
+                            ? (int) Math.round((newCount * 100.0) / total)
+                            : 0;
+                    int inProgressPercent = total > 0
+                            ? (int) Math.round((inProgressCount * 100.0) / total)
+                            : 0;
+                    int donePercent = total > 0
+                            ? (int) Math.round((doneCount * 100.0) / total)
+                            : 0;
+
+                    // simple heuristic: scale volume to 0–100
                     int volumeScore = Math.min(total * 10, 100);
 
                     result.put("Completion %", completionPercent);
@@ -230,6 +247,8 @@ public class DashboardDAO {
         }
         return result;
     }
+
+    /* ===================== DTO ===================== */
 
     public static class ProjectRowDTO {
         private int id;

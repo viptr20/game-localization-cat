@@ -20,7 +20,9 @@
 
     <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
         <h:form id="reviewForm">
-            <p:panel header="#{msg['review.header']}" style="margin:1rem;">
+            <p:panel header="#{msg['review.header']}"
+                     style="margin:1rem;"
+                     styleClass="review-panel">
 
                 <p:toolbar style="margin-bottom:1rem;">
                     <p:toolbarGroup align="right">
@@ -69,8 +71,10 @@
                         <h:outputText value="#{seg.targetText}" />
                     </p:column>
 
-                    <p:column headerText="#{msg['column.status']}">
-                        <p:selectOneMenu value="#{seg.status}" style="width:100%;">
+                    <!-- Status column with constrained width -->
+                    <p:column headerText="#{msg['column.status']}" style="width:8rem;">
+                        <p:selectOneMenu value="#{seg.status}"
+                                         style="width:100%; max-width:7rem;">
                             <f:selectItem itemValue="NEW" itemLabel="#{msg['status.new']}" />
                             <f:selectItem itemValue="IN_PROGRESS" itemLabel="#{msg['status.inProgress']}" />
                             <f:selectItem itemValue="DONE" itemLabel="#{msg['status.done']}" />
@@ -89,6 +93,7 @@
 
                 <p:spacer width="10" />
 
+                <!-- Back – оставен както е, щом работи -->
                 <p:commandButton value="#{msg['button.back']}"
                                  action="back"
                                  process="@this"

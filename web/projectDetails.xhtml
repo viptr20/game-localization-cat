@@ -7,7 +7,7 @@
 
     <f:metadata>
         <f:viewParam name="projectId" value="#{projectDetailsBean.projectId}" />
-        <f:event type="preRenderView" listener="#{projectDetailsBean.init}" />
+        <f:event type="preRenderView" listener="#{projectDetailsBean.load}" />
     </f:metadata>
 
     <html lang="#{localeBean.currentLocale.language}"
@@ -21,6 +21,10 @@
     <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
         <h:form id="detailsForm">
             <p:panel header="#{msg['projectDetails.header']}" style="max-width:800px;margin:2rem auto;">
+
+                <!-- Optional debug: shows current projectId -->
+                <h:outputText value="Project ID param: #{projectDetailsBean.projectId}" />
+                <br /><br />
 
                 <p:toolbar style="margin-bottom:1rem;">
                     <p:toolbarGroup align="right">
@@ -65,32 +69,25 @@
 
                 <br />
 
-                <p:commandButton value="#{msg['button.edit']}"
-                                 action="edit"
-                                 process="@this"
-                                 ajax="false"
-                                 icon="pi pi-pencil">
+                <!-- Actions: Edit, Review, Back  -->
+
+                <!-- Edit: go to projectEditor.xhtml with same projectId -->
+                <h:outputLink value="/index/projectEditor.xhtml" style="margin-right:1rem;">
                     <f:param name="projectId" value="#{projectDetailsBean.projectId}" />
-                </p:commandButton>
+                    #{msg['button.edit']}
+                </h:outputLink>
 
-                <p:spacer width="10" />
-
-                <p:commandButton value="#{msg['button.review']}"
-                                 action="review"
-                                 process="@this"
-                                 ajax="false"
-                                 icon="pi pi-check">
+                <!-- Review: go to review.xhtml with same projectId -->
+                <h:outputLink value="/index/review.xhtml" style="margin-right:1rem;">
                     <f:param name="projectId" value="#{projectDetailsBean.projectId}" />
-                </p:commandButton>
+                    #{msg['button.review']}
+                </h:outputLink>
 
-                <p:spacer width="10" />
+                <!-- Back: go back to projects list -->
+                <h:outputLink value="/index/projects.xhtml">
+                    #{msg['button.back']}
+                </h:outputLink>
 
-                <p:commandButton value="#{msg['button.back']}"
-                                 action="back"
-                                 process="@this"
-                                 ajax="false"
-                                 styleClass="ui-button-secondary"
-                                 icon="pi pi-arrow-left" />
             </p:panel>
         </h:form>
     </h:body>
