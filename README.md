@@ -8,12 +8,12 @@ User/pass за тест: admin/ admin123
 
 # Game Localization CAT Tool
 
-A Java EE web application for managing game localization projects with a multilingual user interface, dashboard analytics, translation editing, and review workflows. The UI is built with JSF and PrimeFaces, and the app uses JSF resource bundles plus a locale bean for full i18n and RTL support.
+A Java EE web application for managing game localization projects with a multilingual user interface, dashboard analytics, translation editing, and review workflows. The UI is built with JSF and PrimeFaces 7, and the app uses JSF resource bundles plus a locale bean for full i18n and RTL support.
 
 ## Features
 
-- Multilingual UI (Bulgarian, English, Portuguese, Arabic, Armenian) via JSF resource bundles.
-- Locale switching with a session-scoped `LocaleBean`, including RTL layout for Arabic.
+- Multilingual UI (Bulgarian, English, Portuguese, Arabic, Armenian, Hebrew) via JSF resource bundles.
+- Locale switching with a session-scoped `LocaleBean`, including RTL layout for Arabic and Hebrew.
 - Dashboard with:
   - project filter
   - summary statistics
@@ -22,7 +22,7 @@ A Java EE web application for managing game localization projects with a multili
 - Project pages:
   - list of localization projects
   - project details
-  - segment editor
+  - segment editor with semantic disctionary integration with Wikidata
   - translation review.
 - User-facing pages:
   - index, help, login, login error, forgot password, user profile.
@@ -45,15 +45,15 @@ Example Docker command:
 docker run --name cat-mariadb \
   -e MYSQL_ROOT_PASSWORD=root \
   -e MYSQL_DATABASE=catdb \
-  -e MYSQL_USER=catuser \
-  -e MYSQL_PASSWORD=catpass \
+  -e MYSQL_USER=root \
+  -e MYSQL_PASSWORD=rootpass \
   -p 3306:3306 \
-  -d mariadb:10.11
+  -d mariadb:11
 ```
 
 - Database: `catdb`
-- User: `catuser`
-- Password: `catpass`
+- User: `root`
+- Password: `rootpass`
 
 Configuration: Configure a JDBC resource in your application server (GlassFish/Payara/Tomcat) pointing to:
 
@@ -74,6 +74,7 @@ The UI relies heavily on PrimeFaces for rich JSF widgets:
 - `p:dataTable` for project lists and segment tables with pagination.
 - `p:tabView`, `p:tab` for the Overview / Details tabs on the dashboard.
 - `p:chart`, `p:radarChart` (bar, pie, radar chart models) for visualizing status and language split.
+- `p:mindmap`
 
 All components are wired to the resource bundles and locale bean so that labels and layout react to the selected language.
 
@@ -103,6 +104,8 @@ src/java/
     messages_pt.properties
     messages_ar.properties
     messages_hy.properties
+    messages_he.properties
+    messages_iw.properties
 
 web/
   *.xhtml
@@ -117,6 +120,6 @@ web/
 2. Configure an application server (GlassFish/Payara/Tomcat with JSF).
 3. Ensure JSF and PrimeFaces libraries are available on the classpath.
 4. Clean and build the project.
-5. Deploy to the server and open `index.xhtml` in the browser.
+5. Deploy to the server and open `index.xhtml`/run in the browser. Local run example URL: http://localhost:9080/index/ (glassfish).
 
 After changes to resource bundles or resources under `web/resources`, do a clean build and redeploy so the server picks up the latest i18n and CSS changes.
