@@ -1,7 +1,7 @@
 package cat.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class Segment implements Serializable {
 
@@ -13,8 +13,8 @@ public class Segment implements Serializable {
     private String sourceText;
     private String targetText;
     private String status;
-    private Timestamp createdAt;
-    private Timestamp completedAt;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Segment() {
     }
@@ -25,8 +25,8 @@ public class Segment implements Serializable {
                    String sourceText,
                    String targetText,
                    String status,
-                   Timestamp createdAt,
-                   Timestamp completedAt) {
+                   Date createdAt,
+                   Date updatedAt) {
         this.id = id;
         this.projectId = projectId;
         this.languagePair = languagePair;
@@ -34,7 +34,7 @@ public class Segment implements Serializable {
         this.targetText = targetText;
         this.status = status;
         this.createdAt = createdAt;
-        this.completedAt = completedAt;
+        this.updatedAt = updatedAt;
     }
 
     public int getId() {
@@ -85,41 +85,51 @@ public class Segment implements Serializable {
         this.status = status;
     }
 
-    public Timestamp getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getCompletedAt() {
-        return completedAt;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setCompletedAt(Timestamp completedAt) {
-        this.completedAt = completedAt;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Segment)) return false;
-        Segment other = (Segment) o;
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Segment)) {
+            return false;
+        }
+
+        Segment other = (Segment) obj;
         return this.id == other.id;
     }
 
     @Override
     public int hashCode() {
-        return Integer.hashCode(id);
+        return Integer.valueOf(id).hashCode();
     }
 
     @Override
     public String toString() {
-        return "Segment{id=" + id +
+        return "Segment{" +
+                "id=" + id +
                 ", projectId=" + projectId +
                 ", languagePair='" + languagePair + '\'' +
+                ", sourceText='" + sourceText + '\'' +
+                ", targetText='" + targetText + '\'' +
                 ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

@@ -15,6 +15,11 @@
         <param-value>0</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>primefaces.UPLOADER</param-name>
+        <param-value>native</param-value>
+    </context-param>
+
     <resource-ref>
         <description>MariaDB CAT Database</description>
         <res-ref-name>jdbc/CATDB</res-ref-name>
@@ -26,6 +31,11 @@
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
+        <multipart-config>
+            <max-file-size>10485760</max-file-size>
+            <max-request-size>20971520</max-request-size>
+            <file-size-threshold>1024</file-size-threshold>
+        </multipart-config>
     </servlet>
 
     <servlet-mapping>

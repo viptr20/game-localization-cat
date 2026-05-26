@@ -7,11 +7,6 @@
       lang="#{localeBean.currentLocale.language}"
       dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
 
-<f:metadata>
-    <f:viewParam name="projectId" value="#{projectEditorBean.projectId}" />
-    <f:event type="preRenderView" listener="#{projectEditorBean.load}" />
-</f:metadata>
-
 <h:head>
     <title>#{msg['projectEditor.title']}</title>
     <h:outputStylesheet library="css" name="layout.css" />
@@ -19,223 +14,344 @@
 
 <h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
 
-    <h:form id="editorForm">
-        <p:panel header="#{msg['projectEditor.header']}" style="margin:1rem;">
+    <f:metadata>
+        <f:viewParam name="projectId" value="#{projectEditorBean.projectId}" />
+    </f:metadata>
+    <f:event type="preRenderView" listener="#{projectEditorBean.load}" />
 
-            <p:toolbar style="margin-bottom:1rem;">
-                <p:toolbarGroup align="right">
-                    <p:selectOneMenu id="localeMenu"
-                                     value="#{localeBean.language}"
-                                     style="min-width:170px;">
-                        <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
-                        <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
-                        <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
-                        <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
-                        <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
-                        <f:selectItem itemValue="he" itemLabel="#{msg['lang.he']}" />
-                    </p:selectOneMenu>
+    <div class="page-shell">
 
-                    <p:spacer width="10" />
+        <p:growl id="growl" showDetail="true" />
+        <p:messages id="globalMessages" showDetail="true" closable="true" class="page-section" />
 
-                    <p:commandButton value="#{msg['button.applyLanguage']}"
-                                     action="#{localeBean.applyLanguage}"
-                                     process="@form"
-                                     ajax="false"
-                                     icon="pi pi-refresh"
-                                     styleClass="ui-button-secondary" />
-                </p:toolbarGroup>
-            </p:toolbar>
+        <div class="page-section">
+            <h:form id="localeForm">
+                <p:panel header="#{msg['projectEditor.header']}">
+                    <p:toolbar style="margin-bottom:1rem;">
+                        <p:toolbarGroup align="right">
+                            <p:selectOneMenu id="localeMenu"
+                                             value="#{localeBean.language}"
+                                             style="min-width:170px;">
+                                <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
+                                <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
+                                <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
+                                <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
+                                <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
+                                <f:selectItem itemValue="he" itemLabel="#{msg['lang.he']}" />
+                            </p:selectOneMenu>
 
-            <p:messages id="messages" showDetail="true" closable="true" />
+                            <p:commandButton value="#{msg['button.applyLanguage']}"
+                                             action="#{localeBean.applyLanguage}"
+                                             process="@form"
+                                             ajax="false"
+                                             icon="pi pi-refresh"
+                                             styleClass="ui-button-secondary" />
+                        </p:toolbarGroup>
+                    </p:toolbar>
 
-            <h:outputText value="#{msg['projectEditor.projectId']} #{projectEditorBean.projectId}" />
-            <br /><br />
+                    <h:outputText value="#{msg['projectEditor.projectId']} #{projectEditorBean.projectId}" />
+                </p:panel>
+            </h:form>
+        </div>
 
-            <p:dataTable id="segmentsTable"
-                         value="#{projectEditorBean.segments}"
-                         var="seg"
-                         style="width:100%;"
-                         selectionMode="single"
-                         rowKey="#{seg.id}"
-                         selection="#{projectEditorBean.selectedSegment}">
+        <div class="page-section">
+            <h:form id="uploadForm" enctype="multipart/form-data">
+                <p:panel header="Import Segments">
+                    <div class="import-stack">
 
-                <p:column selectionMode="single" style="width:3rem" />
+                        <div class="import-row">
+                            <div class="import-label">CSV</div>
+                            <div class="import-picker">
+                                <p:fileUpload value="#{projectEditorBean.uploadedSegmentsCsvFile}"
+                                              mode="simple"
+                                              skinSimple="true"
+                                              allowTypes="/(\.|\/)(csv)$/"
+                                              label="Choose CSV" />
+                            </div>
+                            <div class="import-action">
+                                <p:commandButton value="Import CSV"
+                                                 action="#{projectEditorBean.uploadSegmentsCsv}"
+                                                 process="@form"
+                                                 update=":editorForm:segmentsTable :semanticForm:semanticDialogContent :growl :globalMessages"
+                                                 icon="pi pi-upload" />
+                            </div>
+                        </div>
 
-                <p:column headerText="#{msg['column.id']}" style="width:6rem;">
-                    <h:outputText value="#{seg.id}" />
-                </p:column>
+                        <div class="import-row">
+                            <div class="import-label">XLSX</div>
+                            <div class="import-picker">
+                                <p:fileUpload value="#{projectEditorBean.uploadedSegmentsXlsxFile}"
+                                              mode="simple"
+                                              skinSimple="true"
+                                              allowTypes="/(\.|\/)(xlsx)$/"
+                                              label="Choose XLSX" />
+                            </div>
+                            <div class="import-action">
+                                <p:commandButton value="Import XLSX"
+                                                 action="#{projectEditorBean.uploadSegmentsXlsx}"
+                                                 process="@form"
+                                                 update=":editorForm:segmentsTable :semanticForm:semanticDialogContent :growl :globalMessages"
+                                                 icon="pi pi-upload"
+                                                 styleClass="ui-button-secondary" />
+                            </div>
+                        </div>
 
-                <p:column headerText="#{msg['column.source']}">
-                    <h:outputText value="#{seg.sourceText}" />
-                </p:column>
+                    </div>
+                </p:panel>
+            </h:form>
+        </div>
 
-                <p:column headerText="Language pair" style="width:10rem;">
-                    <h:outputText value="#{seg.languagePair}" />
-                </p:column>
+        <div class="page-section">
+            <h:form id="editorForm">
 
-                <p:column headerText="#{msg['column.target']}">
-                    <p:inputTextarea value="#{seg.targetText}"
-                                     autoResize="true"
-                                     rows="3"
-                                     style="width:100%;" />
-                </p:column>
+                <p:toolbar style="margin-bottom:1rem;">
+                    <p:toolbarGroup>
+                        <p:commandButton value="Export Selected Segments CSV"
+                                         action="#{projectEditorBean.downloadSelectedSegmentsCsv}"
+                                         ajax="false"
+                                         process="@form"
+                                         icon="pi pi-download" />
 
-                <p:column headerText="#{msg['column.status']}" style="width:8rem;">
-                    <p:selectOneMenu value="#{seg.status}" style="width:100%; max-width:7rem;">
-                        <f:selectItem itemLabel="#{msg['status.new']}" itemValue="NEW" />
-                        <f:selectItem itemLabel="#{msg['status.inProgress']}" itemValue="IN_PROGRESS" />
-                        <f:selectItem itemLabel="#{msg['status.done']}" itemValue="DONE" />
-                    </p:selectOneMenu>
-                </p:column>
+                        <p:commandButton value="Export All Segments CSV"
+                                         action="#{projectEditorBean.downloadAllSegmentsCsv}"
+                                         ajax="false"
+                                         process="@this"
+                                         icon="pi pi-download"
+                                         styleClass="ui-button-secondary" />
 
-            </p:dataTable>
+                        <p:commandButton value="Export Selected Segments Excel"
+                                         action="#{projectEditorBean.downloadSelectedSegmentsXlsx}"
+                                         ajax="false"
+                                         process="@form"
+                                         icon="pi pi-file-excel" />
 
-            <br />
+                        <p:commandButton value="Export All Segments Excel"
+                                         action="#{projectEditorBean.downloadAllSegmentsXlsx}"
+                                         ajax="false"
+                                         process="@this"
+                                         icon="pi pi-file-excel"
+                                         styleClass="ui-button-secondary" />
+                    </p:toolbarGroup>
+                </p:toolbar>
 
-            <p:commandButton id="semanticBtn"
-                             value="Semantic Dictionary"
-                             icon="pi pi-search"
-                             action="#{projectEditorBean.loadSemanticSuggestions}"
-                             process="@form"
-                             update="semanticDialog semanticDialogContent mindmapWrapper mindmapDetails messages"
-                             oncomplete="PF('semanticDlg').show()"
-                             ajax="true" />
+                <p:dataTable id="segmentsTable"
+                             value="#{projectEditorBean.segments}"
+                             var="seg"
+                             styleClass="segments-table"
+                             style="width:100%;"
+                             rowKey="#{seg.id}"
+                             selection="#{projectEditorBean.selectedSegments}"
+                             paginator="true"
+                             rows="20">
 
-            <p:spacer width="10" />
+                    <p:column selectionMode="multiple" styleClass="col-select" />
 
-            <p:commandButton value="#{msg['button.save']}"
-                             action="#{projectEditorBean.save}"
-                             process="@form"
-                             update="@form"
-                             icon="pi pi-save" />
+                    <p:column headerText="#{msg['column.id']}" styleClass="col-id">
+                        <h:outputText value="#{seg.id}" />
+                    </p:column>
 
-            <p:spacer width="10" />
+                    <p:column headerText="#{msg['column.source']}" styleClass="col-source">
+                        <h:outputText value="#{seg.sourceText}" />
+                    </p:column>
 
-            <p:commandButton value="#{msg['button.back']}"
-                             action="#{projectEditorBean.goBack}"
-                             process="@this"
-                             ajax="false"
-                             styleClass="ui-button-secondary"
-                             icon="pi pi-arrow-left" />
+                    <p:column headerText="Language pair" styleClass="col-lang">
+                        <h:outputText value="#{seg.languagePair}" />
+                    </p:column>
 
-        </p:panel>
+                    <p:column headerText="#{msg['column.target']}" styleClass="col-target">
+                        <p:inputTextarea value="#{seg.targetText}"
+                                         autoResize="false"
+                                         rows="3"
+                                         style="width:100%;" />
+                    </p:column>
 
-        <p:dialog id="semanticDialog"
-                  header="Semantic Dictionary"
-                  widgetVar="semanticDlg"
-                  modal="true"
-                  resizable="true"
-                  responsive="true"
-                  width="900"
-                  appendTo="@(body)">
+                    <p:column headerText="#{msg['column.status']}" styleClass="col-status">
+                        <p:selectOneMenu value="#{seg.status}" style="width:100%;">
+                            <f:selectItem itemLabel="#{msg['status.new']}" itemValue="NEW" />
+                            <f:selectItem itemLabel="#{msg['status.inProgress']}" itemValue="IN_PROGRESS" />
+                            <f:selectItem itemLabel="#{msg['status.done']}" itemValue="DONE" />
+                        </p:selectOneMenu>
+                    </p:column>
+                </p:dataTable>
 
-            <p:outputPanel id="semanticDialogContent"
-                           style="max-height:70vh; overflow-y:auto; overflow-x:hidden; padding-right:8px;">
+                <br />
 
-                <ui:fragment rendered="#{not empty projectEditorBean.selectedSegment}">
-                    <h:panelGrid columns="2" cellpadding="6" style="width:100%;">
-                        <h:outputText value="Source:" />
-                        <h:outputText value="#{projectEditorBean.selectedSegment.sourceText}" />
+                <p:commandButton id="semanticBtn"
+                                 value="Semantic Dictionary"
+                                 icon="pi pi-search"
+                                 action="#{projectEditorBean.loadSemanticSuggestions}"
+                                 process="@form"
+                                 update=":semanticForm:semanticDialogContent :semanticForm:mindmapWrapper :semanticForm:mindmapDetails :growl :globalMessages"
+                                 oncomplete="PF('semanticDlg').show()"
+                                 ajax="true" />
 
-                        <h:outputText value="Language pair:" />
-                        <h:outputText value="#{projectEditorBean.selectedSegment.languagePair}" />
+                <p:spacer width="10" />
 
-                        <h:outputText value="Status:" />
-                        <h:outputText value="#{projectEditorBean.selectedSegment.status}" />
-                    </h:panelGrid>
+                <p:commandButton value="#{msg['button.save']}"
+                                 action="#{projectEditorBean.save}"
+                                 process="@form"
+                                 update="segmentsTable :growl :globalMessages"
+                                 icon="pi pi-save" />
 
-                    <br />
+                <p:spacer width="10" />
 
-                    <h:outputText value="Suggestions:" style="font-weight:bold;" />
-                    <br /><br />
+                <p:commandButton value="#{msg['button.back']}"
+                                 action="#{projectEditorBean.goBack}"
+                                 process="@this"
+                                 ajax="false"
+                                 styleClass="ui-button-secondary"
+                                 icon="pi pi-arrow-left" />
+            </h:form>
+        </div>
 
-                    <ui:fragment rendered="#{not empty projectEditorBean.semanticSuggestions}">
-                        <p:dataList value="#{projectEditorBean.semanticSuggestions}"
-                                    var="sug"
-                                    type="unordered">
-                            <h:outputText value="#{sug}" />
-                        </p:dataList>
-                    </ui:fragment>
+        <h:form id="semanticForm">
+            <p:dialog id="semanticDialog"
+                      header="Semantic Dictionary"
+                      widgetVar="semanticDlg"
+                      modal="true"
+                      resizable="true"
+                      responsive="true"
+                      width="1100"
+                      height="720"
+                      appendTo="@(body)">
 
-                    <ui:fragment rendered="#{empty projectEditorBean.semanticSuggestions}">
-                        <h:outputText value="No suggestions available." />
-                    </ui:fragment>
+                <p:outputPanel id="semanticDialogContent" styleClass="semantic-scroll">
 
-                    <br /><br />
+                    <ui:fragment rendered="#{not empty projectEditorBean.selectedSegment}">
+                        <h:panelGrid columns="2" cellpadding="6" style="width:100%;">
+                            <h:outputText value="Source:" />
+                            <h:outputText value="#{projectEditorBean.selectedSegment.sourceText}" />
 
-                    <h:outputText value="Wikidata:" style="font-weight:bold;" />
-                    <br /><br />
+                            <h:outputText value="Language pair:" />
+                            <h:outputText value="#{projectEditorBean.selectedSegment.languagePair}" />
 
-                    <ui:fragment rendered="#{not empty projectEditorBean.wikidataEntries}">
-                        <p:dataList value="#{projectEditorBean.wikidataEntries}"
-                                    var="wd"
-                                    type="unordered">
-                            <h:panelGroup layout="block">
-                                <h:outputLink value="#{wd.uri}" target="_blank"
-                                              rendered="#{not empty wd.uri}">
-                                    <h:outputText value="#{wd.label}" />
-                                </h:outputLink>
-
-                                <h:outputText value="#{wd.label}"
-                                              rendered="#{empty wd.uri}" />
-
-                                <h:outputText value=" - #{wd.description}"
-                                              rendered="#{not empty wd.description}" />
-                            </h:panelGroup>
-                        </p:dataList>
-                    </ui:fragment>
-
-                    <ui:fragment rendered="#{empty projectEditorBean.wikidataEntries}">
-                        <h:outputText value="No Wikidata entries available." />
-                    </ui:fragment>
-
-                    <br /><br />
-
-                    <h:outputText value="Wikidata Mindmap:" style="font-weight:bold;" />
-                    <br /><br />
-
-                    <p:outputPanel id="mindmapWrapper" layout="block">
-                        <ui:fragment rendered="#{not empty projectEditorBean.mindmapRoot}">
-                            <p:mindmap id="semanticMindmap"
-                                       value="#{projectEditorBean.mindmapRoot}"
-                                       style="width:100%; height:450px; border:1px solid #ccc;">
-                                <p:ajax event="select"
-                                        listener="#{projectEditorBean.onMindmapNodeSelect}"
-                                        update="mindmapDetails" />
-                            </p:mindmap>
-                        </ui:fragment>
-
-                        <ui:fragment rendered="#{empty projectEditorBean.mindmapRoot}">
-                            <h:outputText value="Mindmap is empty." />
-                        </ui:fragment>
-                    </p:outputPanel>
-
-                    <p:panel id="mindmapDetails" style="margin-top:1rem;">
-                        <h:panelGrid columns="2"
-                                     cellpadding="4"
-                                     rendered="#{not empty projectEditorBean.selectedMindmapNode}">
-                            <h:outputText value="Label:" />
-                            <h:outputText value="#{projectEditorBean.selectedMindmapNode.label}" />
+                            <h:outputText value="Status:" />
+                            <h:outputText value="#{projectEditorBean.selectedSegment.status}" />
                         </h:panelGrid>
 
-                        <h:panelGroup rendered="#{not empty projectEditorBean.selectedMindmapNode and not empty projectEditorBean.selectedMindmapNode.data}">
-                            <br />
-                            <h:outputLink value="#{projectEditorBean.selectedMindmapNode.data}"
-                                          target="_blank">
-                                <h:outputText value="Open in Wikidata" />
-                            </h:outputLink>
-                        </h:panelGroup>
-                    </p:panel>
-                </ui:fragment>
+                        <br /><br />
 
-                <ui:fragment rendered="#{empty projectEditorBean.selectedSegment}">
-                    <h:outputText value="No segment selected." />
-                </ui:fragment>
+                        <h:outputText value="Suggestions:" style="font-weight:bold;" />
+                        <br /><br />
 
-            </p:outputPanel>
-        </p:dialog>
+                        <ui:fragment rendered="#{not empty projectEditorBean.semanticSuggestions}">
+                            <p:dataList value="#{projectEditorBean.semanticSuggestions}"
+                                        var="sug"
+                                        type="unordered">
+                                <h:outputText value="#{sug}" />
+                            </p:dataList>
+                        </ui:fragment>
 
-    </h:form>
+                        <ui:fragment rendered="#{empty projectEditorBean.semanticSuggestions}">
+                            <h:outputText value="No suggestions available." />
+                        </ui:fragment>
 
+                        <br /><br />
+
+                        <h:outputText value="Extracted semantic terms:" style="font-weight:bold;" />
+                        <br /><br />
+
+                        <ui:fragment rendered="#{not empty projectEditorBean.semanticTermCandidates}">
+                            <p:dataTable value="#{projectEditorBean.semanticTermCandidates}"
+                                         var="tc"
+                                         reflow="true"
+                                         rows="5"
+                                         paginator="true"
+                                         style="width:100%;">
+
+                                <p:column headerText="Term">
+                                    <h:outputText value="#{tc.term.text}" />
+                                </p:column>
+
+                                <p:column headerText="Language">
+                                    <h:outputText value="#{tc.term.languageCode}" />
+                                </p:column>
+
+                                <p:column headerText="Candidates">
+                                    <ui:repeat value="#{tc.candidates}" var="wd">
+                                        <h:panelGroup layout="block" style="margin-bottom:8px;">
+                                            <h:outputLink value="#{wd.uri}" target="_blank"
+                                                          rendered="#{not empty wd.uri}">
+                                                <h:outputText value="#{wd.label}" />
+                                            </h:outputLink>
+
+                                            <h:outputText value="#{wd.label}"
+                                                          rendered="#{empty wd.uri}" />
+                                            <br />
+                                            <h:outputText value="#{wd.description}" />
+                                        </h:panelGroup>
+                                    </ui:repeat>
+                                </p:column>
+                            </p:dataTable>
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{empty projectEditorBean.semanticTermCandidates}">
+                            <h:outputText value="No extracted semantic terms available." />
+                        </ui:fragment>
+
+                        <br /><br />
+
+                        <h:outputText value="Wikidata:" style="font-weight:bold;" />
+                        <br /><br />
+
+                        <ui:fragment rendered="#{not empty projectEditorBean.wikidataEntries}">
+                            <p:dataList value="#{projectEditorBean.wikidataEntries}"
+                                        var="wd"
+                                        type="unordered">
+                                <h:panelGroup layout="block">
+                                    <h:outputLink value="#{wd.uri}" target="_blank"
+                                                  rendered="#{not empty wd.uri}">
+                                        <h:outputText value="#{wd.label}" />
+                                    </h:outputLink>
+                                    <h:outputText value="#{wd.label}"
+                                                  rendered="#{empty wd.uri}" />
+                                    <br />
+                                    <h:outputText value="#{wd.description}" />
+                                </h:panelGroup>
+                            </p:dataList>
+                        </ui:fragment>
+
+                        <ui:fragment rendered="#{empty projectEditorBean.wikidataEntries}">
+                            <h:outputText value="No Wikidata entries found." />
+                        </ui:fragment>
+
+                        <br /><br />
+
+                        <ui:fragment rendered="#{not empty projectEditorBean.mindmapRoot}">
+                            <h:outputText value="Mindmap:" style="font-weight:bold;" />
+                            <br /><br />
+
+                            <p:outputPanel id="mindmapWrapper" styleClass="mindmap-wrapper">
+                                <div class="mindmap-canvas">
+                                    <p:mindmap value="#{projectEditorBean.mindmapRoot}">
+                                        <p:ajax event="select"
+                                                listener="#{projectEditorBean.onMindmapNodeSelect}"
+                                                update="mindmapDetails :growl :globalMessages" />
+                                    </p:mindmap>
+                                </div>
+                            </p:outputPanel>
+
+                            <p:outputPanel id="mindmapDetails" styleClass="mindmap-details">
+                                <ui:fragment rendered="#{not empty projectEditorBean.selectedMindmapNode}">
+                                    <h:outputText value="Selected node: " style="font-weight:bold;" />
+                                    <h:outputText value="#{projectEditorBean.selectedMindmapNode.label}" />
+                                </ui:fragment>
+
+                                <ui:fragment rendered="#{empty projectEditorBean.selectedMindmapNode}">
+                                    <h:outputText value="Select a node in the mindmap to inspect it." />
+                                </ui:fragment>
+                            </p:outputPanel>
+                        </ui:fragment>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{empty projectEditorBean.selectedSegment}">
+                        <h:outputText value="Please select at least one segment first." />
+                    </ui:fragment>
+
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+
+    </div>
 </h:body>
 </html>

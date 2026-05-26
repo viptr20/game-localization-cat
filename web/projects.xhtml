@@ -1,93 +1,147 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
-      lang="#{localeBean.currentLocale.language}"
-      dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
-
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>#{msg['projects.title']}</title>
+    <title>Projects</title>
     <h:outputStylesheet library="css" name="layout.css" />
 </h:head>
 
-<h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
-    <h:form id="projectsForm">
-        <p:panel header="#{msg['projects.header']}" style="margin:1rem;">
+<h:body styleClass="ltr-layout">
+    <div class="page-shell">
 
-            <!-- Toolbar with language selector -->
-            <p:toolbar style="margin-bottom:1rem;">
-                <p:toolbarGroup align="right">
-                    <p:selectOneMenu id="localeMenu"
-                                     value="#{localeBean.language}"
-                                     style="min-width:170px;">
-                        <f:selectItem itemValue="bg" itemLabel="#{msg['lang.bg']}" />
-                        <f:selectItem itemValue="en" itemLabel="#{msg['lang.en']}" />
-                        <f:selectItem itemValue="pt" itemLabel="#{msg['lang.pt']}" />
-                        <f:selectItem itemValue="ar" itemLabel="#{msg['lang.ar']}" />
-                        <f:selectItem itemValue="hy" itemLabel="#{msg['lang.hy']}" />
-                        <f:selectItem itemValue="he" itemLabel="#{msg['lang.he']}" />
-                    </p:selectOneMenu>
+        <p:growl id="growl" showDetail="true" life="3000" />
 
-                    <p:spacer width="10" />
+        <p:panel header="Projects" styleClass="page-section">
 
-                    <p:commandButton value="#{msg['button.applyLanguage']}"
-                                     action="#{localeBean.applyLanguage}"
-                                     process="@form"
-                                     ajax="false"
-                                     icon="pi pi-refresh"
-                                     styleClass="ui-button-secondary" />
-                </p:toolbarGroup>
-            </p:toolbar>
+            <h:form id="projectsUploadForm" enctype="multipart/form-data" styleClass="page-section">
+                <p:panel header="Import Projects">
+                    <div class="import-stack">
 
-            <!-- Projects table -->
-            <p:dataTable value="#{projectsBean.projects}"
-                         var="prj"
-                         paginator="true"
-                         rows="10"
-                         style="width:100%;">
+                        <div class="import-row">
+                            <div class="import-label">CSV</div>
+                            <div class="import-picker">
+                                <p:fileUpload value="#{projectsBean.projectsCsvFile}"
+                                              mode="simple"
+                                              skinSimple="true"
+                                              allowTypes="/(\.|\/)(csv)$/"
+                                              label="Choose CSV" />
+                            </div>
+                            <div class="import-action">
+                                <p:commandButton value="Import CSV"
+                                                 action="#{projectsBean.uploadProjectsCsv}"
+                                                 process="@form"
+                                                 update=":projectsMainForm:projectsTable :growl"
+                                                 icon="pi pi-upload" />
+                            </div>
+                        </div>
 
-                <p:column headerText="#{msg['column.id']}">
-                    <h:outputText value="#{prj.id}" />
-                </p:column>
+                        <div class="import-row">
+                            <div class="import-label">XLSX</div>
+                            <div class="import-picker">
+                                <p:fileUpload value="#{projectsBean.projectsXlsxFile}"
+                                              mode="simple"
+                                              skinSimple="true"
+                                              allowTypes="/(\.|\/)(xlsx)$/"
+                                              label="Choose XLSX" />
+                            </div>
+                            <div class="import-action">
+                                <p:commandButton value="Import XLSX"
+                                                 action="#{projectsBean.uploadProjectsXlsx}"
+                                                 process="@form"
+                                                 update=":projectsMainForm:projectsTable :growl"
+                                                 icon="pi pi-upload"
+                                                 styleClass="ui-button-secondary" />
+                            </div>
+                        </div>
 
-                <p:column headerText="#{msg['column.name']}">
-                    <h:outputText value="#{prj.name}" />
-                </p:column>
+                    </div>
+                </p:panel>
+            </h:form>
 
-                <p:column headerText="#{msg['column.source']}">
-                    <h:outputText value="#{prj.sourceLang}" />
-                </p:column>
+            <h:form id="projectsMainForm">
+                <p:toolbar style="margin-bottom:1rem;">
 
-                <p:column headerText="#{msg['column.targets']}">
-                    <h:outputText value="#{prj.targetLangs}" />
-                </p:column>
+                    <p:toolbarGroup>
+                        <p:commandButton value="Export Selected CSV"
+                                         action="#{projectsBean.downloadSelectedProjectsCsv}"
+                                         ajax="false"
+                                         process="@form"
+                                         icon="pi pi-download" />
 
-                <p:column headerText="#{msg['column.status']}">
-                    <h:outputText value="#{prj.status}" />
-                </p:column>
+                        <p:commandButton value="Export All CSV"
+                                         action="#{projectsBean.downloadAllProjectsCsv}"
+                                         ajax="false"
+                                         process="@this"
+                                         icon="pi pi-download"
+                                         styleClass="ui-button-secondary" />
 
-                <p:column headerText="#{msg['column.actions']}">
-                    <!-- Plain link to details with projectId as query param -->
-                    <h:outputLink value="/index/projectDetails.xhtml">
-                        <f:param name="projectId" value="#{prj.id}" />
-                        #{msg['button.details']}
-                    </h:outputLink>
-                </p:column>
+                        <p:commandButton value="Export Selected XLSX"
+                                         action="#{projectsBean.downloadSelectedProjectsXlsx}"
+                                         ajax="false"
+                                         process="@form"
+                                         icon="pi pi-file-excel" />
 
-            </p:dataTable>
+                        <p:commandButton value="Export All XLSX"
+                                         action="#{projectsBean.downloadAllProjectsXlsx}"
+                                         ajax="false"
+                                         process="@this"
+                                         icon="pi pi-file-excel"
+                                         styleClass="ui-button-secondary" />
+                    </p:toolbarGroup>
 
-            <br />
+                    <p:toolbarGroup align="right">
+                        <p:button value="Back"
+                                  outcome="/dashboard.xhtml"
+                                  icon="pi pi-arrow-left"
+                                  styleClass="ui-button-secondary" />
+                    </p:toolbarGroup>
 
-            <!-- Back to dashboard using existing navigation rule -->
-            <p:commandButton value="#{msg['button.backToDashboard']}"
-                             action="back"
-                             process="@this"
-                             ajax="false"
-                             icon="pi pi-arrow-left"
-                             styleClass="ui-button-secondary" />
+                </p:toolbar>
+
+                <p:dataTable id="projectsTable"
+                             value="#{projectsBean.projects}"
+                             var="p"
+                             rowKey="#{p.id}"
+                             selection="#{projectsBean.selectedProjects}"
+                             paginator="true"
+                             rows="10"
+                             reflow="true"
+                             style="width:100%;">
+
+                    <p:column selectionMode="multiple" style="width:3rem; text-align:center;" />
+
+                    <p:column headerText="ID">
+                        <h:outputText value="#{p.id}" />
+                    </p:column>
+
+                    <p:column headerText="Name">
+                        <h:outputText value="#{p.name}" />
+                    </p:column>
+
+                    <p:column headerText="Source">
+                        <h:outputText value="#{p.sourceLang}" />
+                    </p:column>
+
+                    <p:column headerText="Targets">
+                        <h:outputText value="#{p.targetLangs}" />
+                    </p:column>
+
+                    <p:column headerText="Status">
+                        <h:outputText value="#{p.status}" />
+                    </p:column>
+
+                    <p:column headerText="Actions">
+                        <h:link outcome="/projectDetails.xhtml" value="Details">
+                            <f:param name="projectId" value="#{p.id}" />
+                        </h:link>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
 
         </p:panel>
-    </h:form>
+    </div>
 </h:body>
 </html>

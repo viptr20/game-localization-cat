@@ -63,4 +63,8 @@ public class ProjectDetailsBean implements Serializable {
     public String getDescription() {
         return project != null ? project.getDescription() : "";
     }
+
+    public String openEditor() {
+        return "/projectEditor.xhtml?faces-redirect=true&projectId=" + projectId;
+    }
 }

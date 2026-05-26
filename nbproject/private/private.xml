@@ -2,44 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/dashboard.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/WEB-INF/faces-config.xml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/index.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/help.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/forgotPassword.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/login.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/loginError.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/projects.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/projectDetails.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/projectEditor.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/review.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/userProfile.xhtml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/LoginBean.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/ProjectsBean.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/ProjectDetailsBean.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/ProjectEditorBean.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/ReviewBean.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/UserProfileBean.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/DashboardBean.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/DashboardDAO.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/db/DBUtil.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/ProjectDAO.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/SegmentDAO.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/dao/UserDAO.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/model/Segment.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/cat/view/LocaleBean.java</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages.properties</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_ar.properties</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_bg.properties</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_en.properties</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_hy.properties</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_pt.properties</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/index.jsp</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_he.properties</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/src/java/i18n/messages_iw.properties</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/WEB-INF/glassfish-web.xml</file>
-            <file>file:/Users/vanyaramirez/NetBeansProjects/CAT/web/WEB-INF/web.xml</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -61,6 +61,8 @@ Configuration: Configure a JDBC resource in your application server (GlassFish/P
 
 and update the JNDI name in the DAO / configuration to match your environment. 
 
+Data: real data can be loaded from the Data folder either through the database or through the import option on the UI.
+
 ## PrimeFaces components
 
 The UI relies heavily on PrimeFaces for rich JSF widgets:

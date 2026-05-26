@@ -53,11 +53,13 @@
                 <h:outputText value="#{msg['review.projectId']} #{reviewBean.projectId}" />
                 <br /><br />
 
+                <!-- Same pattern as segmentsTable: table class + status col class -->
                 <p:dataTable value="#{reviewBean.segments}"
                              var="seg"
                              paginator="true"
                              rows="10"
-                             style="width:100%;">
+                             style="width:100%;"
+                             styleClass="review-table">
 
                     <p:column headerText="#{msg['column.id']}">
                         <h:outputText value="#{seg.id}" />
@@ -71,10 +73,10 @@
                         <h:outputText value="#{seg.targetText}" />
                     </p:column>
 
-                    <!-- Status column with constrained width -->
-                    <p:column headerText="#{msg['column.status']}" style="width:8rem;">
+                    <p:column headerText="#{msg['column.status']}"
+                              styleClass="review-status-col">
                         <p:selectOneMenu value="#{seg.status}"
-                                         style="width:100%; max-width:7rem;">
+                                         style="width:100%;">
                             <f:selectItem itemValue="NEW" itemLabel="#{msg['status.new']}" />
                             <f:selectItem itemValue="IN_PROGRESS" itemLabel="#{msg['status.inProgress']}" />
                             <f:selectItem itemValue="DONE" itemLabel="#{msg['status.done']}" />
@@ -93,7 +95,6 @@
 
                 <p:spacer width="10" />
 
-                <!-- Back – оставен както е, щом работи -->
                 <p:commandButton value="#{msg['button.back']}"
                                  action="back"
                                  process="@this"

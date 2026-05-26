@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="CAT" default="default" basedir=".">
-    <description>Builds, tests, and runs the project CAT.</description>
+<project name="CAT_KB" default="default" basedir=".">
+    <description>Builds, tests, and runs the project CAT_KB.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 

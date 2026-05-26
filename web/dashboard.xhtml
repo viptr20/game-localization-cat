@@ -26,13 +26,15 @@
                     <h:outputText value="#{msg['label.project']}: " style="margin-right:8px;" />
 
                     <p:selectOneMenu id="projectMenu"
-                                     value="#{dashboardBean.selectedProjectId}"
-                                     style="min-width:220px;">
+                                    value="#{dashboardBean.selectedProjectId}"
+                                    filter="true"
+                                    filterMatchMode="contains"
+                                    style="min-width:220px;">
                         <f:selectItem itemLabel="#{msg['label.allProjects']}" itemValue="#{null}" />
                         <f:selectItems value="#{dashboardBean.projects}"
-                                       var="proj"
-                                       itemValue="#{proj.id}"
-                                       itemLabel="#{proj.name}" />
+                                    var="proj"
+                                    itemValue="#{proj.id}"
+                                    itemLabel="#{proj.name}" />
                         <p:ajax listener="#{dashboardBean.onProjectChange}"
                                 update="dashboardForm" />
                     </p:selectOneMenu>
@@ -160,6 +162,7 @@
                         </p:column>
 
                     </p:dataTable>
+                    
                 </p:tab>
 
             </p:tabView>
