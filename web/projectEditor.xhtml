@@ -24,6 +24,7 @@
         <p:growl id="growl" showDetail="true" />
         <p:messages id="globalMessages" showDetail="true" closable="true" class="page-section" />
 
+        <!-- Header / language -->
         <div class="page-section">
             <h:form id="localeForm">
                 <p:panel header="#{msg['projectEditor.header']}">
@@ -54,19 +55,27 @@
             </h:form>
         </div>
 
+        <!-- Import segments -->
         <div class="page-section">
             <h:form id="uploadForm" enctype="multipart/form-data">
                 <p:panel header="Import Segments">
                     <div class="import-stack">
 
+                        <!-- CSV -->
                         <div class="import-row">
                             <div class="import-label">CSV</div>
                             <div class="import-picker">
-                                <p:fileUpload value="#{projectEditorBean.uploadedSegmentsCsvFile}"
-                                              mode="simple"
-                                              skinSimple="true"
+                                <p:fileUpload mode="advanced"
+                                              dragDropSupport="false"
+                                              multiple="false"
+                                              auto="false"
+                                              update=":growl :globalMessages"
                                               allowTypes="/(\.|\/)(csv)$/"
-                                              label="Choose CSV" />
+                                              sizeLimit="10485760"
+                                              fileUploadListener="#{projectEditorBean.onSegmentsCsvUpload}"
+                                              label="Choose CSV"
+                                              uploadLabel="Upload"
+                                              cancelLabel="Cancel" />
                             </div>
                             <div class="import-action">
                                 <p:commandButton value="Import CSV"
@@ -77,14 +86,21 @@
                             </div>
                         </div>
 
+                        <!-- XLSX -->
                         <div class="import-row">
                             <div class="import-label">XLSX</div>
                             <div class="import-picker">
-                                <p:fileUpload value="#{projectEditorBean.uploadedSegmentsXlsxFile}"
-                                              mode="simple"
-                                              skinSimple="true"
+                                <p:fileUpload mode="advanced"
+                                              dragDropSupport="false"
+                                              multiple="false"
+                                              auto="false"
+                                              update=":growl :globalMessages"
                                               allowTypes="/(\.|\/)(xlsx)$/"
-                                              label="Choose XLSX" />
+                                              sizeLimit="10485760"
+                                              fileUploadListener="#{projectEditorBean.onSegmentsXlsxUpload}"
+                                              label="Choose XLSX"
+                                              uploadLabel="Upload"
+                                              cancelLabel="Cancel" />
                             </div>
                             <div class="import-action">
                                 <p:commandButton value="Import XLSX"
@@ -101,6 +117,7 @@
             </h:form>
         </div>
 
+        <!-- Segments table / export / save -->
         <div class="page-section">
             <h:form id="editorForm">
 
@@ -134,6 +151,7 @@
                     </p:toolbarGroup>
                 </p:toolbar>
 
+                <!-- IMPORTANT: this is the original working table -->
                 <p:dataTable id="segmentsTable"
                              value="#{projectEditorBean.segments}"
                              var="seg"
@@ -204,6 +222,7 @@
             </h:form>
         </div>
 
+        <!-- Semantic dialog -->
         <h:form id="semanticForm">
             <p:dialog id="semanticDialog"
                       header="Semantic Dictionary"

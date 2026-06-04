@@ -4,5 +4,5 @@ RUN mkdir -p /opt/payara/deployments \
     /opt/payara/appserver/glassfish/domains/domain1/osgi-cache \
     /opt/payara/appserver/glassfish/domains/domain1/generated \
     && chown -R payara:payara /opt/payara/appserver/glassfish /opt/payara/deployments
-COPY dist/CAT.war /opt/payara/deployments/ROOT.war
+COPY dist/CAT_KB.war /opt/payara/deployments/ROOT.war
 USER payara

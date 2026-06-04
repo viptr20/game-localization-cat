@@ -72,19 +72,19 @@
                 <!-- Actions: Edit, Review, Back  -->
 
                 <!-- Edit: go to projectEditor.xhtml with same projectId -->
-                <h:outputLink value="/index/projectEditor.xhtml" style="margin-right:1rem;">
+                <h:outputLink value="/projectEditor.xhtml" style="margin-right:1rem;">
                     <f:param name="projectId" value="#{projectDetailsBean.projectId}" />
                     #{msg['button.edit']}
                 </h:outputLink>
 
                 <!-- Review: go to review.xhtml with same projectId -->
-                <h:outputLink value="/index/review.xhtml" style="margin-right:1rem;">
+                <h:outputLink value="/review.xhtml" style="margin-right:1rem;">
                     <f:param name="projectId" value="#{projectDetailsBean.projectId}" />
                     #{msg['button.review']}
                 </h:outputLink>
 
                 <!-- Back: go back to projects list -->
-                <h:outputLink value="/index/projects.xhtml">
+                <h:outputLink value="/projects.xhtml">
                     #{msg['button.back']}
                 </h:outputLink>
 

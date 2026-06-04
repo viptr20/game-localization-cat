@@ -2,54 +2,72 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      lang="#{localeBean.currentLocale.language}"
+      dir="#{localeBean.rtl ? 'rtl' : 'ltr'}">
+
 <h:head>
-    <title>Projects</title>
+    <title>#{msg['projects.title']}</title>
     <h:outputStylesheet library="css" name="layout.css" />
 </h:head>
 
-<h:body styleClass="ltr-layout">
+<h:body styleClass="#{localeBean.rtl ? 'rtl-layout' : 'ltr-layout'}">
     <div class="page-shell">
 
         <p:growl id="growl" showDetail="true" life="3000" />
 
-        <p:panel header="Projects" styleClass="page-section">
+        <p:panel header="#{msg['projects.header']}" styleClass="page-section">
 
+            <!-- Import Projects -->
             <h:form id="projectsUploadForm" enctype="multipart/form-data" styleClass="page-section">
-                <p:panel header="Import Projects">
+                <p:panel header="#{msg['projects.importProjects']}">
                     <div class="import-stack">
 
+                        <!-- CSV -->
                         <div class="import-row">
-                            <div class="import-label">CSV</div>
+                            <div class="import-label">#{msg['projects.csv']}</div>
                             <div class="import-picker">
-                                <p:fileUpload value="#{projectsBean.projectsCsvFile}"
-                                              mode="simple"
-                                              skinSimple="true"
+                                <p:fileUpload mode="advanced"
+                                              dragDropSupport="false"
+                                              multiple="false"
+                                              auto="false"
+                                              update=":growl"
                                               allowTypes="/(\.|\/)(csv)$/"
-                                              label="Choose CSV" />
+                                              sizeLimit="10485760"
+                                              fileUploadListener="#{projectsBean.onProjectsCsvUpload}"
+                                              label="#{msg['upload.choose']}"
+                                              uploadLabel="#{msg['upload.upload']}"
+                                              cancelLabel="#{msg['upload.cancel']}" />
                             </div>
                             <div class="import-action">
-                                <p:commandButton value="Import CSV"
+                                <p:commandButton value="#{msg['projects.importCsv']}"
                                                  action="#{projectsBean.uploadProjectsCsv}"
-                                                 process="@form"
+                                                 process="@this"
                                                  update=":projectsMainForm:projectsTable :growl"
                                                  icon="pi pi-upload" />
                             </div>
                         </div>
 
+                        <!-- XLSX -->
                         <div class="import-row">
-                            <div class="import-label">XLSX</div>
+                            <div class="import-label">#{msg['projects.xlsx']}</div>
                             <div class="import-picker">
-                                <p:fileUpload value="#{projectsBean.projectsXlsxFile}"
-                                              mode="simple"
-                                              skinSimple="true"
+                                <p:fileUpload mode="advanced"
+                                              dragDropSupport="false"
+                                              multiple="false"
+                                              auto="false"
+                                              update=":growl"
                                               allowTypes="/(\.|\/)(xlsx)$/"
-                                              label="Choose XLSX" />
+                                              sizeLimit="10485760"
+                                              fileUploadListener="#{projectsBean.onProjectsXlsxUpload}"
+                                              label="#{msg['upload.choose']}"
+                                              uploadLabel="#{msg['upload.upload']}"
+                                              cancelLabel="#{msg['upload.cancel']}" />
                             </div>
                             <div class="import-action">
-                                <p:commandButton value="Import XLSX"
+                                <p:commandButton value="#{msg['projects.importXlsx']}"
                                                  action="#{projectsBean.uploadProjectsXlsx}"
-                                                 process="@form"
+                                                 process="@this"
                                                  update=":projectsMainForm:projectsTable :growl"
                                                  icon="pi pi-upload"
                                                  styleClass="ui-button-secondary" />
@@ -60,30 +78,31 @@
                 </p:panel>
             </h:form>
 
+            <!-- Projects table / export -->
             <h:form id="projectsMainForm">
                 <p:toolbar style="margin-bottom:1rem;">
 
                     <p:toolbarGroup>
-                        <p:commandButton value="Export Selected CSV"
+                        <p:commandButton value="#{msg['projects.exportSelectedCsv']}"
                                          action="#{projectsBean.downloadSelectedProjectsCsv}"
                                          ajax="false"
                                          process="@form"
                                          icon="pi pi-download" />
 
-                        <p:commandButton value="Export All CSV"
+                        <p:commandButton value="#{msg['projects.exportAllCsv']}"
                                          action="#{projectsBean.downloadAllProjectsCsv}"
                                          ajax="false"
                                          process="@this"
                                          icon="pi pi-download"
                                          styleClass="ui-button-secondary" />
 
-                        <p:commandButton value="Export Selected XLSX"
+                        <p:commandButton value="#{msg['projects.exportSelectedXlsx']}"
                                          action="#{projectsBean.downloadSelectedProjectsXlsx}"
                                          ajax="false"
                                          process="@form"
                                          icon="pi pi-file-excel" />
 
-                        <p:commandButton value="Export All XLSX"
+                        <p:commandButton value="#{msg['projects.exportAllXlsx']}"
                                          action="#{projectsBean.downloadAllProjectsXlsx}"
                                          ajax="false"
                                          process="@this"
@@ -92,8 +111,8 @@
                     </p:toolbarGroup>
 
                     <p:toolbarGroup align="right">
-                        <p:button value="Back"
-                                  outcome="/dashboard.xhtml"
+                        <p:button value="#{msg['button.back']}"
+                                  outcome="dashboard"
                                   icon="pi pi-arrow-left"
                                   styleClass="ui-button-secondary" />
                     </p:toolbarGroup>
@@ -112,28 +131,28 @@
 
                     <p:column selectionMode="multiple" style="width:3rem; text-align:center;" />
 
-                    <p:column headerText="ID">
+                    <p:column headerText="#{msg['column.id']}">
                         <h:outputText value="#{p.id}" />
                     </p:column>
 
-                    <p:column headerText="Name">
+                    <p:column headerText="#{msg['projects.name']}">
                         <h:outputText value="#{p.name}" />
                     </p:column>
 
-                    <p:column headerText="Source">
+                    <p:column headerText="#{msg['projects.source']}">
                         <h:outputText value="#{p.sourceLang}" />
                     </p:column>
 
-                    <p:column headerText="Targets">
+                    <p:column headerText="#{msg['projects.targets']}">
                         <h:outputText value="#{p.targetLangs}" />
                     </p:column>
 
-                    <p:column headerText="Status">
+                    <p:column headerText="#{msg['column.status']}">
                         <h:outputText value="#{p.status}" />
                     </p:column>
 
-                    <p:column headerText="Actions">
-                        <h:link outcome="/projectDetails.xhtml" value="Details">
+                    <p:column headerText="#{msg['projects.actions']}">
+                        <h:link outcome="/projectDetails.xhtml" value="#{msg['projects.details']}">
                             <f:param name="projectId" value="#{p.id}" />
                         </h:link>
                     </p:column>
